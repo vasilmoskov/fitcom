@@ -1,0 +1,71 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/fitcom?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    username: root
+    password: 1234
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 5MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  sql:
+    init:
+      mode: never
+  jpa:
+    # Choose either MySQL 8 or MySQL 5 below
+    # For MySQL 8
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #For MySQL 5
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+#    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: testdevstuff1@gmail.com
+    password: ${gmail_password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 279770444333539
+            client-secret: 2accbb54c658aa39ad6b733d74dca585
+          google:
+            client-id: 694014954959-imulcqbmin4a8sfua2g5ub491adqd6e4.apps.googleusercontent.com
+            client-secret: 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
+#          fitcom:
+#            client-id: fitcom
+#            client-secret: i5b2Wr2ILkz96CrnhGYbtLTaMbMmxVwh
+#            client-name: fitcom
+#            scope: openid
+#            redirect-uri: http://localhost:8080/login/ouath2/code/fitcom
+#            client-authentication-method: basic
+#            authorization-grant-type: authorization_code
+#            provider: keycloak
+#
+#        provider:
+#          keycloak:
+#            issuer-uri: "http://localhost:8081/realms/Fitcom"
+cloudinary:
+  api-key: 128558148968146
+  api-secret: ${cloudinary_secret}
+  cloud-name: dilbpiicv
