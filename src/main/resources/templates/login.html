@@ -1,0 +1,63 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Login</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Login</h1>
+    </div>
+
+    <div class="form-wrapper">
+
+        <form class="fit-form" th:method="post" th:action="@{/login}">
+
+            <div class="input-field">
+                <label for="email">Email:</label>
+                <input th:value="${email}" type="email" id="email" name="email" placeholder="john@gmail.com">
+            </div>
+
+            <div class="input-field">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+            </div>
+
+            <div class="input-field">
+                <p th:if="${bad_credentials}" class="errors alert alert-danger">Invalid username or password!</p>
+            </div>
+
+            <div class="checkbox-wrapper">
+                <input type="checkbox" onclick="showPassword()">Show Password
+            </div>
+
+            <div class="input-field">
+                <input id="login-btn" type="submit" value="Login">
+            </div>
+
+            <a th:href="@{/password}">Forgot password</a>
+        </form>
+    </div>
+
+    <div class="social-login">
+
+        <a th:href="@{/oauth2/authorization/google}"
+           class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"
+           type="submit"><i class="fab fa-google me-2"></i> Sign in with google</a>
+        <a th:href="@{/oauth2/authorization/facebook}"
+           class="btn btn-lg btn-block btn-primary" style="background-color: #3b5998;"
+           type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</a>
+    </div>
+
+    <div class="go-to-register">
+        <p>Don't have an account? <a th:href="@{/register}">Register</a></p>
+    </div>
+
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

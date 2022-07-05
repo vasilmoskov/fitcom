@@ -1,0 +1,24 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Register</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+<div class="stepping-title">
+    <h2 class="main-title">Account Created!</h2>
+</div>
+
+<div>
+    <p style="text-align: center">Your account has been confirmed. <a th:href="@{/login}">Login</a></p>
+    <p style="text-align: center"><a th:href="@{/}">Go back to homepage</a></p>
+</div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

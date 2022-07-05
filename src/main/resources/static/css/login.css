@@ -1,0 +1,76 @@
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    color: #344250;;
+}
+
+.fit-form {
+    margin: 0 0 30px 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 2px solid #344250;
+    width: 30%;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.input-field {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    margin: 10px 0;
+    justify-content: center;
+}
+
+.input-field label {
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.input-field input {
+    padding: 8px 5px;
+    width: 60%;
+}
+
+/*.login-unsuccessful {*/
+/*    display: none;*/
+/*}*/
+
+#login-btn {
+    color: white;
+    padding: 10px 60px;
+    border-radius: 10px;
+    background-color: #344250;
+    border: none;
+    font-size: 1em;
+}
+
+#login-btn:hover {
+    background-color: #FDDD05;
+    color: #344250;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+}
+
+.social-login a {
+    margin: 0 5px;
+}
+
+.social-login a:hover {
+    color: white;
+}
+
+.go-to-register {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.go-to-register p {
+    margin-bottom: 0;
+}

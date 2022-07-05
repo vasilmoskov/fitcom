@@ -1,0 +1,120 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Register</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+<div class="stepping-title">
+    <h1 class="main-title">Register</h1>
+</div>
+
+<div class="form-wrapper">
+
+    <form class="register-form" enctype="multipart/form-data"
+          th:method="post" th:action="@{/register}" th:object="${registerModel}">
+
+        <div class="input-field-wrapper">
+            <label for="firstName">*First Name:</label>
+            <input class="input-field"
+                   type="text"
+                   id="firstName"
+                   th:field="*{firstName}"
+                   th:errorclass="is-invalid"
+            >
+
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name is required</p>
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="lastName">*Last Name:</label>
+            <input class="input-field" type="text" id="lastName" name="lastName"
+                   th:field="*{lastName}"
+                   th:errorclass="is-invalid"
+            >
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name is required</p>
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="age">Age:</label>
+            <input class="input-field" type="number" id="age" name="age"
+                   th:field="*{age}"
+                   th:errorclass="is-invalid"
+            >
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age is required</p>
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="email">*Email:</label>
+            <input class="input-field" id="email" name="email"
+                   th:field="*{email}"
+                   th:errorclass="is-invalid"
+
+            >
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email is required</p>
+        </div>
+
+        <div class="profile-label-wrapper">
+            <label for="avatar">Profile Photo:</label>
+            <input type="file"
+                   id="avatar"
+                   name="avatar"
+                   th:field="*{avatar}">
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="password">*Password:</label>
+            <input class="input-field" type="password" id="password" name="password"
+                   th:field="*{password}"
+                   th:errorclass="is-invalid">
+
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password is required
+            </p>
+
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="confirmPassword">*Confirm Password:</label>
+            <input class="input-field" type="password" id="confirmPassword" name="confirmPassword"
+                   th:field="*{confirmPassword}"
+                   th:errorclass="is-invalid"
+            >
+
+            <p class="invalid-feedback errors alert alert-danger"
+               th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">
+                Confirm password is required
+            </p>
+
+        </div>
+
+        <div class="checkbox-wrapper">
+            <input type="checkbox" onclick="showPassword()">Show Password
+        </div>
+
+        <div class="input-field-wrapper">
+            <label for="roles">Mark if you want to contribute in our page as a:</label>
+            <div class="checkbox-wrapper">
+                <input class="checkbox-field" type="checkbox" id="roles" name="roles"
+                       th:each="r : ${roles}"
+                       th:text="${r.name()}"
+                       th:value="${r.name()}">
+            </div>
+        </div>
+
+        <div class="input-field">
+            <input id="register-btn" type="submit" value="Register">
+        </div>
+    </form>
+</div>
+</main>
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>
