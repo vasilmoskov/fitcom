@@ -1,0 +1,22 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Token</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+
+    <div class="stepping-title">
+        <h2 class="main-title">Your token has expired. Please submit your request again.</h2>
+    </div>
+
+    <p class="home-link" style="text-align: center">Click <a th:href="@{/}">here</a> to go back to the Homepage.</p>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Home</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+
+    <div class="stepping-title">
+        <h1 class="main-title">FitCom</h1>
+        <h2 class="sub-title">The place for sharing training programs and diets.</h2>
+    </div>
+
+    <div class="wrapper">
+        <div class="training-programs-wrapper">
+            <img class="training-programs-img" src="/images/pushup.jpeg" alt="pushup">
+            <a class="training-programs-link" th:href="@{/training-programs}">To our training programs</a>
+        </div>
+
+        <div class="training-programs-wrapper">
+            <img class="training-programs-img" src="/images/diet.jpeg" alt="meal">
+            <a class="training-programs-link" th:href="@{/diets}">To our diets</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+</body>
+
+</html>

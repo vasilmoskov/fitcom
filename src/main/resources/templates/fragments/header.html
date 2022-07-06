@@ -1,0 +1,74 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<header th:fragment="navbar">
+
+    <div class="title-wrapper">
+        <h1 class="title">FitCom</h1>
+        <a th:href="@{/}">
+            <img class="logo" src="/images/logo.png" alt="biceps">
+        </a>
+    </div>
+
+
+    <nav class="navbar">
+        <ul class="navbar-list">
+            <li class="welcome-msg" sec:authorize="isAuthenticated()">Welcome,
+                <span th:text="${#authentication.principal.getGreetingName()}"></span>!
+            </li>
+
+            <th:block sec:authorize="hasAuthority('ADMIN')">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton2"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">Admin
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <li><a class="dropdown-item" th:href="@{/comments/pending}">Pending Comments</a></li>
+                        <li><a class="dropdown-item" th:href="@{/pending/applications}">Pending Applications</a></li>
+                        <li><a class="dropdown-item" th:href="@{/stats}">Stats</a></li>
+                    </ul>
+                </div>
+            </th:block>
+
+            <th:block sec:authorize="${isAuthenticated() && !hasAuthority('ADMIN')}">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">Profile
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" th:href="@{/profile}">General</a></li>
+                        <li><a class="dropdown-item" th:href="@{/favourites}">Favourites</a></li>
+                        <li><a class="dropdown-item" th:href="@{/posts}">Posts</a></li>
+                    </ul>
+                </div>
+            </th:block>
+
+            <li><a th:href="@{/}">Home</a></li>
+
+            <th:block sec:authorize="${!isAuthenticated()}">
+                <li><a th:href="@{/login}">Login</a></li>
+                <li><a th:href="@{/register}">Register</a></li>
+            </th:block>
+
+            <li><a th:href="@{/training-programs}">Training programs</a></li>
+            <li><a th:href="@{/diets}">Diets</a></li>
+
+            <th:block sec:authorize="${isAuthenticated()}">
+                <!--                    <li><a th:href="@{/profile}">Profile</a></li>-->
+
+                <form id="logout-form" th:action="@{/logout}" th:method="post">
+                    <input id="logout-btn" type="submit" value="Logout">
+                </form>
+            </th:block>
+
+        </ul>
+    </nav>
+</header>
+</html>
