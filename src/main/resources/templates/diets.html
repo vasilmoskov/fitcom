@@ -1,0 +1,37 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Diets</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Taste some of our healthy diets!</h1>
+    </div>
+
+    <section class="trainings-wrapper">
+        <div th:if="${!diets.isEmpty()}" th:each="d : ${diets}" th:object="${d}" class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="*{title}">Title</h5>
+                <p class="author" th:text="*{author}"></p>
+                <p class="posted-on" th:text="*{created}"></p>
+                <p class="card-text" th:text="*{description}">Description</p>
+                <a th:href="@{/diets/{id}(id=*{id})}" class="btn btn-primary">Taste this diet</a>
+            </div>
+        </div>
+
+        <p th:if="${diets.isEmpty()}">There are no diets yet!</p>
+    </section>
+
+    <div class="add-training">
+        <a th:href="@{/diets/add}">Add diet</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

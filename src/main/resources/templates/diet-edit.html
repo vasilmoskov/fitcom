@@ -1,0 +1,73 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Diet</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+    <div class="form-wrapper">
+
+        <form class="training-form"
+              th:object="${diet}"
+              th:action="@{/diets/{id}/edit(id=*{id})}"
+              th:method="PUT">
+
+            <div class="training-label-wrapper">
+                <label for="title">Title:</label>
+                <input type="text"
+                       id="title"
+                       th:field="*{title}"
+                       th:errorclass="is-invalid">
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title is required!</p>
+            </div>
+
+            <div class="training-label-wrapper">
+                <label for="description">Description:</label>
+                <textarea
+                        id="description"
+                        cols="45" rows="5"
+                        th:field="*{description}"
+                        th:errorclass="is-invalid">
+            </textarea>
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description is required!</p>
+            </div>
+
+            <p class="training-label-wrapper">Aim of this training:</p>
+
+            <div class="radio-wrapper">
+                <input type="radio"
+                       id="lose_fat"
+                       th:field="*{purpose}"
+                       th:errorclass="is-invalid"
+                       th:value="LOSE_FAT">
+                <label for="lose_fat">Lose Fat</label>
+                <input type="radio"
+                       id="gain_mass"
+                       th:field="*{purpose}"
+                       th:errorclass="is-invalid"
+                       th:value="GAIN_MASS">
+                <label for="gain_mass">Gain Mass</label>
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('purpose')}" th:errors="*{purpose}">Goal is required!</p>
+            </div>
+
+            <div class="input-field">
+                <input id="submit-btn" type="submit" value="Save">
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

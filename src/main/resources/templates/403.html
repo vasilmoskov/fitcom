@@ -1,0 +1,29 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Forbidden</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+
+    <div class="stepping-title">
+        <h2 class="main-title">Sorry, you have to be a certified <span th:text="${neededRole}"></span> to publish in this page.</h2>
+    </div>
+
+    <form th:if="${hasApplied == false}" class="apply-form" th:action="@{/apply/{neededRole}(neededRole=${neededRole})}" th:method="post">
+        <input class="fit-btn" type="submit" value="Apply">
+    </form>
+
+    <p th:if="${hasApplied}" style="text-align: center">Your application is being processed. Please wait.</p>
+
+    <p class="home-link" style="text-align: center">Click <a th:href="@{/}">here</a> to go back to the Homepage.</p>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

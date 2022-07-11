@@ -1,0 +1,97 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Diet</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+
+    <div class="stepping-title">
+        <h1 class="main-title">Get ready to workout!</h1>
+    </div>
+
+    <div class="training-wrapper" th:object="${diet}">
+        <div class="info">
+            <h5 th:text="*{title}">Title</h5>
+            <p class="author" th:text="*{author}">Author</p>
+            <p class="posted-on" th:text="*{created}">Created</p>
+            <p th:text="*{description}">Description</p>
+        </div>
+
+        <div class="buttons" th:if="${canModify}">
+
+            <a class="fit-btn" th:href="@{/diets/{id}/edit(id=*{id})}">Edit</a>
+
+            <form class="buttons-form" th:action="@{/diets/{id}(id=*{id})}" th:method="delete">
+                <input class="fit-btn" type="submit" value="Delete">
+            </form>
+        </div>
+
+        <div class="buttons" th:if="${!canModify && !isInUserFavourites}">
+            <form class="buttons-form" th:action="@{/diets/{id}/add-to-favourites(id=*{id})}" th:method="post">
+                <input class="fit-btn" type="submit" value="Add to favourites">
+            </form>
+        </div>
+
+        <div class="buttons" th:if="${!canModify && isInUserFavourites}">
+            <form class="buttons-form" th:action="@{/diets/{id}/remove-from-favourites(id=*{id})}"
+                  th:method="post">
+                <input class="fit-btn" type="submit" value="Remove from favourites">
+            </form>
+        </div>
+
+        <section class="comments">
+            <h1>Comments</h1>
+            <div class="comment mt-4 text-justify"
+                 th:each="c : ${comments}" th:object="${c}">
+                <h5 th:text="*{author}  + ' - ' + *{created}">Jhon Doe</h5>
+                <p th:text="*{textContent}">Lorem ipsum</p>
+            </div>
+
+            <div>
+                <span id="commentCtnr"></span>
+            </div>
+            <div>
+                <!-- Comments submission -->
+                <form id="commentForm"
+                      th:action="@{/diets/{id}/comment(id=${diet.id})}"
+                      th:method="POST"
+                      th:object="${commentBindingModel}"
+                      action="/">
+                    <div class="form-group">
+                        <h4>Leave a comment</h4>
+                        <label for="message">Message</label>
+                        <textarea name="message"
+                                  th:field="*{textContent}"
+                                  th:errorclass="is-invalid"
+                                  id="message"
+                                  cols="30"
+                                  rows="5"
+                                  class="form-control"
+                                  style="background-color: white;"></textarea>
+                        <small th:if="${#fields.hasErrors('textContent')}"
+                               th:errors="*{textContent}"
+                               id="messageError"
+                               class="invalid-feedback">
+                            Please leave a comment.
+                        </small>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px">
+                        <input type="submit"
+                               class="fit-btn"
+                               id="postComment"
+                               value="Post Comment"/>
+                    </div>
+                </form>
+                <!-- Comments submission -->
+            </div>
+        </section>
+
+    </div>
+</main>
+<footer th:replace="fragments/footer.html :: footer"></footer>
+</body>
+</html>
