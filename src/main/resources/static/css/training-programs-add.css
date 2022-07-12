@@ -1,0 +1,73 @@
+.training-form {
+    margin: 50px 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    border: 2px solid #344250;
+    width: 50%;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.training-label-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    margin: 10px 0;
+    justify-content: flex-start;
+}
+
+.training-label-wrapper label {
+    flex-basis: 100%;
+    margin-bottom: 5px;
+}
+
+.training-label-wrapper input {
+    padding: 8px 5px;
+    width: 60%;
+}
+
+.checkbox-wrapper input {
+    margin: 0 5px;
+}
+
+#exercises {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.exercise-num {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+textarea {
+    width: 100%;
+}
+
+.add-ex-btn {
+    color: #344250;
+    background-color: white;
+    border: 1px solid #344250;
+    border-radius: 6px;
+}
+
+.add-ex-btn:hover {
+    color: white;
+    background-color: #344250;
+    border-radius: 6px;
+}
+
+#submit-btn {
+    color: white;
+    padding: 10px 60px;
+    border-radius: 10px;
+    background-color: #344250;
+    border: none;
+    font-size: 1em;
+}
+
+#submit-btn:hover {
+    background-color: #FDDD05;
+    color: #344250;
+}

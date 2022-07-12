@@ -1,0 +1,99 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Trainings</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Try some of our amazing programs!</h1>
+    </div>
+
+    <p class="info-paragraph">Search training by title:</p>
+    <section class="search-bar-wrapper">
+        <form class="input-group search-bar"
+              th:method="get"
+              th:action="@{/training-programs}">
+            <input type="search"
+                   class="form-control rounded"
+                   name="title"
+                   th:value="${title}"
+                   placeholder="Search"
+                   aria-label="Search"
+                   aria-describedby="search-addon"/>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </section>
+
+    <p class="info-paragraph">Or select a what body part you want to train:</p>
+
+    <section class="category-wrapper">
+        <form th:method="get" th:action="@{/training-programs}">
+            <div class="list-group list-group-horizontal-md">
+                <input name="bodyPart" type="submit" th:value="ALL" class="list-group-item link"
+                       th:classappend="${bodyPart == null || bodyPart == ''} ? 'active-link' : ''"/>
+                <input name="bodyPart" type="submit" class="list-group-item link"
+                       th:each="b : ${T(bg.softuni.fitcom.models.enums.BodyPartEnum).values()}"
+                       th:value="${b}"
+                       th:classappend="${bodyPart == b.name()} ? 'active-link' : ''"/>
+            </div>
+        </form>
+    </section>
+
+    <section class="trainings-wrapper">
+        <p th:if="${trainingPrograms.isEmpty()}">No trainings to show.</p>
+
+        <div th:each="t : ${trainingPrograms}" th:object="${t}" class="card bg-dark text-white" style="width: 25rem;">
+            <img th:src="@{*{pictureUrl}}" alt="bodyPart" class="card-img blur-img">
+            <div class="card-img-overlay">
+                <h5 class="card-title card-content" th:text="*{title}">Title</h5>
+                <p class="author card-content" th:text="*{author}"></p>
+                <p class="posted-on card-content" th:text="*{created}"></p>
+                <p class="card-text card-content" th:text="*{description}">Description</p>
+                <a th:href="@{/training-programs/{id}(id=*{id})}" class="btn btn-primary">Try this training</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="pagination-wrapper" th:if="${lastPage > 1}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:if="${pageNo > 1}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/training-programs(title = ${title},
+                                                    bodyPart = ${bodyPart},
+                                                    pageNo=${pageNo - 1},
+                                                    pageSize=${pageSize},
+                                                    sortBy=${sortBy})}"
+                    >Previous</a>
+                </li>
+
+                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                    <a class="page-link"
+                       th:classappend="${pageNo == pageNumber} ? 'active-link' : ''"
+                       th:href="@{/training-programs(title = ${title}, bodyPart = ${bodyPart}, pageNo=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy})}"
+                       th:text="${pageNumber}">1</a>
+                </li>
+
+                <li th:if="${pageNo < lastPage}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/training-programs(title = ${title}, bodyPart = ${bodyPart}, pageNo=${pageNo + 1}, pageSize=${pageSize}, sortBy=${sortBy})}"
+                    >Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="add-training">
+        <a th:href="@{/training-programs/add}">Add training program</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

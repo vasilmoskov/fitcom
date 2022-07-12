@@ -1,0 +1,51 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Posts</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">My Posts</h1>
+    </div>
+
+    <div class="trainings-wrapper favourites">
+        <h5>My Training Programs</h5>
+
+        <div th:if="${!trainingPrograms.isEmpty()}" th:each="t : ${trainingPrograms}" th:object="${t}" class="card"
+             style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="*{title}">Title</h5>
+                <p class="author" th:text="*{author}"></p>
+                <p class="posted-on" th:text="*{created}"></p>
+                <p class="card-text" th:text="*{description}">Description</p>
+                <a th:href="@{/training-programs/{id}(id=*{id})}" class="btn btn-primary">View training</a>
+            </div>
+        </div>
+
+        <p th:if="${trainingPrograms.isEmpty()}">No trainings created by me!</p>
+    </div>
+
+    <div class="trainings-wrapper favourites">
+        <h5>My diets</h5>
+
+        <div th:if="${!diets.isEmpty()}" th:each="d : ${diets}" th:object="${d}" class="card"
+             style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="*{title}">Title</h5>
+                <p class="author" th:text="*{author}"></p>
+                <p class="posted-on" th:text="*{created}"></p>
+                <p class="card-text" th:text="*{description}">Description</p>
+                <a th:href="@{/diets/{id}(id=*{id})}" class="btn btn-primary">View diet</a>
+            </div>
+        </div>
+
+        <p th:if="${diets.isEmpty()}">No diets created by me.</p>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+</body>
+</html>

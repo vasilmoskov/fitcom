@@ -1,0 +1,48 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Pending</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Pending Applications</h1>
+    </div>
+
+    <div class="trainings-wrapper favourites">
+
+        <div th:if="${!applications.isEmpty()}" th:each="a : ${applications}" th:object="${a}" class="admin card">
+            <div class="card-body">
+                <p th:text="*{user} + ' is applying for:'"></p>
+                <ul>
+                    <li th:each="r : *{roles}" th:text="${r.name().toLowerCase()}"></li>
+                </ul>
+                <!--            <p th:each="r : *{roles}" th:text="${r.name().toLowerCase()}"></p>-->
+
+                <!--            <div th:each="r : *{roles}">-->
+                <!--                <p th:text="${r.name().toLowerCase()}"></p>-->
+                <!--            </div>-->
+
+                <div class="admin buttons">
+                    <form class="buttons-form" th:action="@{/pending/applications/{userId}(userId=*{userId})}"
+                          th:method="post">
+                        <input class="fit-btn" type="submit" value="Approve">
+                    </form>
+                    <form class="buttons-form" th:action="@{/pending/applications/{userId}(userId=*{userId})}"
+                          th:method="delete">
+                        <input class="fit-btn" type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <p th:if="${applications.isEmpty()}">No pending applications!</p>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+</body>
+</html>

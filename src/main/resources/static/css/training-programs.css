@@ -1,0 +1,111 @@
+/*.main-title {*/
+/*    margin-top: 40px;*/
+/*}*/
+
+.info-paragraph {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.search-bar-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar {
+    width: 50%;
+}
+
+.category-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    margin: 10px;
+}
+
+.trainings-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 100px;
+    justify-content: center;
+}
+
+/*#training-title {*/
+/*    margin-bottom: 0;*/
+/*}*/
+
+.blur-img {
+    -webkit-filter: blur(2px);
+}
+
+.card-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 8px;
+    width: fit-content;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.author, .posted-on {
+    font-style: italic;
+}
+
+.author {
+    margin-bottom: 0;
+}
+
+.btn-primary {
+    color: white;
+    background-color: #344250;
+    border: 1px solid white;
+}
+
+.btn-primary:hover {
+    color: #344250;
+    background-color: #FDDD05;
+    border: 1px solid #344250;
+}
+
+.add-training {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.add-training a {
+    text-decoration: none;
+    font-size: 30px;
+    color: #344250;
+    border: 1px solid #344250;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px;
+}
+
+.add-training a:hover {
+    background-color: #344250;
+    color: white;
+}
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.link, .page-link {
+    color: #344250;
+}
+
+.active-link {
+    color: white;
+    background-color: #344250;
+}
+
+.link:hover, .page-link:hover {
+    background-color: #FDDD05;
+}
+

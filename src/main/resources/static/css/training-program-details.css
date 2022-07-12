@@ -1,0 +1,53 @@
+.training-wrapper {
+    color: #344250;
+    margin: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.training-info, .img-wrapper {
+    flex-basis: 45%;
+}
+
+.img-wrapper {
+    height: fit-content;
+}
+
+.img-wrapper img {
+    max-width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.exercise {
+    color: #344250;
+}
+
+.buttons {
+    margin-top: 50px;
+    display: flex;
+}
+
+.buttons-form {
+    margin: 0;
+}
+
+.fit-btn {
+    text-decoration: none;
+    color: white;
+    background-color: #344250;
+    border: 1px solid #344250;
+    border-radius: 10px;
+    padding: 10px 50px;
+    margin: 0 10px;
+}
+
+.fit-btn:hover {
+    color: #344250;
+    background-color: #FDDD05;
+}
+
+.comments {
+    flex-basis: 100%;
+    margin-top: 50px;
+}

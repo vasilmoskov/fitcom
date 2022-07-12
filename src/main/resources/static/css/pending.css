@@ -1,0 +1,7 @@
+.admin {
+    flex-basis: 100%;
+}
+
+.admin.buttons {
+    margin: 0;
+}
