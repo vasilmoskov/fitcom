@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/training-programs", "/diets", "/password*").permitAll()
                 .antMatchers("/training-programs/add").hasAnyAuthority("TRAINER", "ADMIN")
                 .antMatchers("/diets/add").hasAnyAuthority("NUTRITIONIST", "ADMIN")
+                .antMatchers("/pending/**", "/stats").hasAuthority("ADMIN")
                 .antMatchers("/**").authenticated()
             .and()
                 .exceptionHandling()

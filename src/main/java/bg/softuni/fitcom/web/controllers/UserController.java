@@ -1,15 +1,20 @@
 package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.models.binding.ProfileEditBindingModel;
-import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.service.CloudinaryImageServiceModel;
 import bg.softuni.fitcom.models.service.ProfileEditServiceModel;
+import bg.softuni.fitcom.models.user.FitcomUserDetails;
 import bg.softuni.fitcom.models.view.ProfileViewModel;
+import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
 import bg.softuni.fitcom.services.CloudinaryService;
+import bg.softuni.fitcom.services.TrainingProgramService;
 import bg.softuni.fitcom.services.UserService;
+import bg.softuni.fitcom.social.FitcomPrincipal;
+import bg.softuni.fitcom.web.interceptors.ViewsInterceptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,24 +24,32 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 //@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final TrainingProgramService trainingProgramService;
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
-    public UserController(UserService userService, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
+    private final ViewsInterceptor viewsInterceptor;
+
+    public UserController(UserService userService, TrainingProgramService trainingProgramService,
+                          CloudinaryService cloudinaryService, ModelMapper modelMapper,
+                          ViewsInterceptor viewsInterceptor) {
         this.userService = userService;
+        this.trainingProgramService = trainingProgramService;
         this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
+        this.viewsInterceptor = viewsInterceptor;
     }
 
     @GetMapping("/profile")
@@ -136,5 +149,23 @@ public class UserController {
     public String delete(@PathVariable long userId) {
         this.userService.deleteApplication(userId);
         return "redirect:/pending/applications";
+    }
+
+    @PreAuthorize("@userServiceImpl.isAdmin(#principal.username)")
+    @GetMapping("/stats")
+    public String visitedUrls(Model model) {
+        Map<Long, Integer> trainingProgramIdsToViews = viewsInterceptor.getTrainingProgramIdsToViews();
+
+        Map<TrainingProgramDetailsViewModel, Integer> trainingProgramsToViews = new HashMap<>();
+
+        for (var entry : trainingProgramIdsToViews.entrySet()) {
+            long id = entry.getKey();
+            TrainingProgramDetailsViewModel trainingProgram = trainingProgramService.getTrainingProgram(id);
+            trainingProgramsToViews.put(trainingProgram, entry.getValue());
+        }
+
+        model.addAttribute("trainingProgramsToViews", trainingProgramsToViews);
+
+        return "stats";
     }
 }

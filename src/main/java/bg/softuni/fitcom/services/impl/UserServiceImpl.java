@@ -141,6 +141,7 @@ public class UserServiceImpl implements UserService {
         return serviceModel;
     }
 
+    @Transactional
     @Override
     public List<TrainingProgramsOverviewViewModel> getPostedTrainingPrograms(String email) {
         return this.trainingProgramRepository

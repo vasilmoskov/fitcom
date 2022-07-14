@@ -14,7 +14,7 @@
 
     <nav class="navbar">
         <ul class="navbar-list">
-            <li class="welcome-msg" sec:authorize="isAuthenticated()">Welcome,
+            <li class="welcome-msg" sec:authorize="isAuthenticated()"><span th:text="#{navbar_welcome_message}"></span>,
                 <span th:text="${#authentication.principal.getGreetingName()}"></span>!
             </li>
 
@@ -27,7 +27,8 @@
                             aria-expanded="false">Admin
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                        <li><a class="dropdown-item" th:href="@{/comments/pending}">Pending Comments</a></li>
+                        <li><a class="dropdown-item" th:text="#{navbar_pending_comments}"
+                               th:href="@{/comments/pending}">Pending Comments</a></li>
                         <li><a class="dropdown-item" th:href="@{/pending/applications}">Pending Applications</a></li>
                         <li><a class="dropdown-item" th:href="@{/stats}">Stats</a></li>
                     </ul>
@@ -36,35 +37,52 @@
 
             <th:block sec:authorize="${isAuthenticated() && !hasAuthority('ADMIN')}">
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle"
+                    <button th:text="#{navbar_profile}" class="btn btn-secondary dropdown-toggle"
                             type="button"
                             id="dropdownMenuButton1"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">Profile
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" th:href="@{/profile}">General</a></li>
-                        <li><a class="dropdown-item" th:href="@{/favourites}">Favourites</a></li>
-                        <li><a class="dropdown-item" th:href="@{/posts}">Posts</a></li>
+                        <li><a class="dropdown-item" th:text="#{navbar_profile_general}"
+                               th:href="@{/profile}">General</a></li>
+                        <li><a class="dropdown-item" th:text="#{navbar_profile_favourites}" th:href="@{/favourites}">Favourites</a>
+                        </li>
+                        <li><a class="dropdown-item" th:text="#{navbar_profile_posts}" th:href="@{/posts}">Posts</a>
+                        </li>
                     </ul>
                 </div>
             </th:block>
 
-            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:text="#{navbar_home}" th:href="@{/}">Home</a></li>
 
             <th:block sec:authorize="${!isAuthenticated()}">
-                <li><a th:href="@{/login}">Login</a></li>
-                <li><a th:href="@{/register}">Register</a></li>
+                <li><a th:text="#{navbar_login}" th:href="@{/login}">Login</a></li>
+                <li><a th:text="#{navbar_register}" th:href="@{/register}">Register</a></li>
             </th:block>
 
-            <li><a th:href="@{/training-programs}">Training programs</a></li>
-            <li><a th:href="@{/diets}">Diets</a></li>
+            <li><a th:text="#{navbar_training_programs}" th:href="@{/training-programs}">Training programs</a></li>
+            <li><a th:text="#{navbar_diets}" th:href="@{/diets}">Diets</a></li>
 
             <th:block sec:authorize="${isAuthenticated()}">
                 <!--                    <li><a th:href="@{/profile}">Profile</a></li>-->
 
                 <form id="logout-form" th:action="@{/logout}" th:method="post">
-                    <input id="logout-btn" type="submit" value="Logout">
+                    <input th:value="#{navbar_logout}" id="logout-btn" type="submit" value="Logout">
+                </form>
+            </th:block>
+
+            <th:block>
+                <form style="margin: 0" th:method="get">
+                    <label for="lang"> <i class="fa-solid fa-earth-americas"></i></label>
+                    <select class="btn btn-secondary dropdown-toggle"
+                            onchange="this.form.submit()"
+                            id="lang"
+                            name="lang">
+                        <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                        <option value="de_DE" th:selected="${#locale.toString()} == 'de_DE'">Deutsch</option>
+                        <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                    </select>
                 </form>
             </th:block>
 
