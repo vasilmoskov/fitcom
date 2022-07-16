@@ -1,0 +1,79 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Profile</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Edit Profile</h1>
+    </div>
+
+    <div class="form-wrapper">
+
+        <form class="profile-form" enctype="multipart/form-data"
+              th:object="${userModel}"
+              th:action="@{/profile/edit}"
+              th:method="PUT">
+
+            <div class="profile-label-wrapper">
+                <label for="avatar">Profile Photo:</label>
+                <input type="file"
+                       id="avatar"
+                       name="avatar">
+            </div>
+
+            <div class="profile-label-wrapper">
+                <label for="firstName">First Name:</label>
+                <input type="text"
+                       id="firstName"
+                       th:field="*{firstName}"
+                       th:errorclass="is-invalid">
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name is required!</p>
+            </div>
+
+            <div class="profile-label-wrapper">
+                <label for="lastName">Last Name:</label>
+                <input type="text"
+                       id="lastName"
+                       th:field="*{lastName}"
+                       th:errorclass="is-invalid">
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name is required!</p>
+            </div>
+
+            <div class="profile-label-wrapper">
+                <label for="email">Email:</label>
+                <input disabled type="text"
+                       id="email"
+                       th:field="*{email}">
+            </div>
+
+            <div class="profile-label-wrapper">
+                <label for="age">Age:</label>
+                <input type="text"
+                       id="age"
+                       th:field="*{age}"
+                       th:errorclass="is-invalid">
+
+                <p class="invalid-feedback errors alert alert-danger"
+                   th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age is required!</p>
+            </div>
+
+            <div>
+                <input id="submit-btn" type="submit" value="Save">
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>

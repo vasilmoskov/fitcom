@@ -1,0 +1,38 @@
+﻿<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head.html :: head"></th:block>
+    <title>Stats</title>
+</head>
+<body>
+<header th:replace="fragments/header.html :: navbar"></header>
+<main>
+    <div class="stepping-title">
+        <h1 class="main-title">Stats</h1>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table" th:if="${!trainingProgramsToViews.isEmpty()}">
+            <thead>
+            <tr>
+                <th scope="col">Training Program</th>
+                <th scope="col">Author</th>
+                <th scope="col">Views</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${trainingProgramsToViews.entrySet()}">
+                <td th:text="${t.getKey().title}"></td>
+                <td th:text="${t.getKey().author}"></td>
+                <td th:text="${t.getValue()}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<footer th:replace="fragments/footer.html :: footer"></footer>
+</body>
+</html>
