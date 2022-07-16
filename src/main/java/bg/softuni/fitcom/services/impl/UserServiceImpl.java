@@ -173,6 +173,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean isAdmin(String email) {
         return this.userRepository
                 .findByEmail(email)

@@ -109,8 +109,8 @@ public class DietController {
     // Copied:
 
     @GetMapping("/{id}/edit")
-    @PreAuthorize("@dietServiceImpl.canModify(#principal.username, #id)")
-    public String getEditDiet(@PathVariable long id, Model model) {
+    @PreAuthorize("@dietServiceImpl.canModify(#principal.name, #id)")
+    public String getEditDiet(@PathVariable long id, Model model, Authentication principal) {
         DietDetailsViewModel viewModel = this.dietService.getDiet(id);
 
         DietBindingModel bindingModel = this.modelMapper
@@ -145,24 +145,24 @@ public class DietController {
         return "redirect:/diets";
     }
 
-    @PreAuthorize("@dietServiceImpl.canModify(#principal.username, #id)")
+    @PreAuthorize("@dietServiceImpl.canModify(#principal.name, #id)")
     @DeleteMapping("/{id}")
-    public String deleteDiet(@PathVariable long id) {
+    public String deleteDiet(@PathVariable long id, Authentication principal) {
         this.dietService.deleteDiet(id);
         return "redirect:/diets";
     }
 
     @PostMapping("/{id}/add-to-favourites")
-    @PreAuthorize("!@dietServiceImpl.isInUserFavourites(#principal.username, #id)")
-    public String addToFavourites(@PathVariable long id, Authentication auth) {
-        this.dietService.addToFavourites(id, auth.getName());
+    @PreAuthorize("!@dietServiceImpl.isInUserFavourites(#principal.name, #id)")
+    public String addToFavourites(@PathVariable long id, Authentication principal) {
+        this.dietService.addToFavourites(id, principal.getName());
         return "redirect:/diets/" + id;
     }
 
     @PostMapping("/{id}/remove-from-favourites")
-    @PreAuthorize("@dietServiceImpl.isInUserFavourites(#principal.username, #id)")
-    public String removeFromFavourites(@PathVariable long id, Authentication auth) {
-        this.dietService.removeFromFavourites(id, auth.getName());
+    @PreAuthorize("@dietServiceImpl.isInUserFavourites(#principal.name, #id)")
+    public String removeFromFavourites(@PathVariable long id, Authentication principal) {
+        this.dietService.removeFromFavourites(id, principal.getName());
         return "redirect:/diets/" + id;
     }
 }

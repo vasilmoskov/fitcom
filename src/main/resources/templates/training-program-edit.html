@@ -75,6 +75,15 @@
                 <th:block th:each="e, i : ${exerciseData}">
                     <h5 th:if="${e.contains('name|')}" class="exercise-num">Edit Exercise</h5>
 
+                    <button th:if="${e.contains('name|')}" class="add-ex-btn" type="button"
+                            th:training-id="${trainingProgram.id}"
+                            th:exercise-name="${e.substring(5)}"
+                            onclick="removeExercise(this.getAttribute('training-id'), this.getAttribute('exercise-name'))"
+                            >Remove exercise
+                    </button>
+
+                    <!-- th:onclick="'removeExercise(' + ${trainingProgram.id}, ${e} + ')'"-->
+
                     <div class="training-label-wrapper" th:if="${e.contains('name|')}">
                         <label for="exName">Name:</label>
                         <input type="text"
@@ -88,8 +97,9 @@
                         <textarea
                                 id="exDescription" cols="45" rows="5" name="exercisesData"
                                 th:text="${e.substring(12)}">
-                </textarea>
+                        </textarea>
                     </div>
+
                     <div class=" training-label-wrapper" th:if="${e.contains('video|')}">
                         <label for="exVideo">Video:</label>
                         <input type="text" id="exVideo"

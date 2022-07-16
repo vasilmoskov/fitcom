@@ -86,7 +86,7 @@ public class AccountController {
         this.accountService.create(serviceModel);
         this.eventPublisher.publishEvent(new OnCreateAccountEvent(serviceModel, ""));
 
-        return "redirect:/email-sent";
+        return "email-sent";
     }
 
     @GetMapping("/confirm")

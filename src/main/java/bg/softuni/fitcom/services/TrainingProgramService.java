@@ -32,4 +32,5 @@ public interface TrainingProgramService {
 
     int getLastPageNumber(String title, String bodyPart, Integer pageSize);
 
+    void removeExerciseFromTraining(long id, String exerciseName);
 }

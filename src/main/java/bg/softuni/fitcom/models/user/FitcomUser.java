@@ -1,20 +1,20 @@
 package bg.softuni.fitcom.models.user;
 
-import bg.softuni.fitcom.social.FitcomPrincipal;
+//import bg.softuni.fitcom.models.user.FitcomPrincipal;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class FitcomUserDetails implements UserDetails, FitcomPrincipal {
+public class FitcomUser implements UserDetails, FitcomPrincipal {
     private final String password;
     private final String email;
     private final String firstName;
     private final String lastName;
     private final Collection<GrantedAuthority> authorities;
 
-    public FitcomUserDetails(String password, String email, String firstName, String lastName,
-                             Collection<GrantedAuthority> authorities) {
+    public FitcomUser(String password, String email, String firstName, String lastName,
+                      Collection<GrantedAuthority> authorities) {
         this.password = password;
         this.email = email;
         this.firstName = firstName;
@@ -72,17 +72,17 @@ public class FitcomUserDetails implements UserDetails, FitcomPrincipal {
         return true;
     }
 
-    public String getGreetingName() {
-        if (getFirstName() != null && !getFirstName().isEmpty()) {
-            return getFirstName();
-        }
-
-        if (getLastName() != null && !getLastName().isEmpty()) {
-            return "Mr. " + getLastName();
-        }
-
-        return "Anonymous";
-    }
+//    public String getGreetingName() {
+//        if (getFirstName() != null && !getFirstName().isEmpty()) {
+//            return getFirstName();
+//        }
+//
+//        if (getLastName() != null && !getLastName().isEmpty()) {
+//            return "Mr. " + getLastName();
+//        }
+//
+//        return "Anonymous";
+//    }
 
     @Override
     public String getName() {

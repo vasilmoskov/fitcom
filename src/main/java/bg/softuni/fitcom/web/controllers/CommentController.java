@@ -21,8 +21,8 @@ public class CommentController {
     }
 
     @GetMapping("/pending")
-    @PreAuthorize("@userServiceImpl.isAdmin(#principal.username)")
-    public String getPending(Model model) {
+    @PreAuthorize("@userServiceImpl.isAdmin(#principal.name)")
+    public String getPending(Model model, Authentication principal) {
         model.addAttribute("comments", this.commentService.getPending());
         return "pending";
     }

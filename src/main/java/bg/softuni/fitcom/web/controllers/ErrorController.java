@@ -17,12 +17,17 @@ public class ErrorController {
         this.userService = userService;
     }
 
+    @GetMapping("forbidden")
+    public String unauthorized() {
+        return "403";
+    }
+
     @GetMapping("/training-programs/add/forbidden")
     public String getErrorForTrainer(Model model, Authentication auth) {
         model.addAttribute("neededRole", "trainer");
         model.addAttribute("hasApplied", this.userService.hasApplied(auth.getName(), RoleEnum.TRAINER));
 
-        return "403";
+        return "not-allowed";
     }
 
     @GetMapping("/diets/add/forbidden")
@@ -30,6 +35,6 @@ public class ErrorController {
         model.addAttribute("neededRole", "nutritionist");
         model.addAttribute("hasApplied", this.userService.hasApplied(auth.getName(), RoleEnum.NUTRITIONIST));
 
-        return "403";
+        return "not-allowed";
     }
 }

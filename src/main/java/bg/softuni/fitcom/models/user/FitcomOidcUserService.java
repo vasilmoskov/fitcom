@@ -1,4 +1,4 @@
-package bg.softuni.fitcom.social;
+package bg.softuni.fitcom.models.user;
 
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;

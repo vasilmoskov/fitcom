@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "exercises")
 public class ExerciseEntity extends BaseEntity {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Lob
@@ -52,6 +52,4 @@ public class ExerciseEntity extends BaseEntity {
         this.videoUrl = videoUrl;
         return this;
     }
-
-
 }

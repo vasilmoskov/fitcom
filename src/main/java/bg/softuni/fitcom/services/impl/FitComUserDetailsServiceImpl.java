@@ -2,11 +2,10 @@ package bg.softuni.fitcom.services.impl;
 
 import bg.softuni.fitcom.exceptions.ResourceNotFoundException;
 import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.models.user.FitcomUserDetails;
+import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,8 +38,7 @@ public class FitComUserDetailsServiceImpl implements UserDetailsService {
                 .map(r -> new SimpleGrantedAuthority(r.getRole().name()))
                 .collect(Collectors.toList());
 
-        return new FitcomUserDetails( userEntity.getPassword(), userEntity.getEmail(),
+        return new FitcomUser(userEntity.getPassword(), userEntity.getEmail(),
                 userEntity.getFirstName(), userEntity.getLastName(), authorities);
-//        return new User(userEntity.getEmail(),userEntity.getPassword(), authorities);
     }
 }

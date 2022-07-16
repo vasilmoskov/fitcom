@@ -1,6 +1,5 @@
-package bg.softuni.fitcom.social;
+package bg.softuni.fitcom.models.user;
 
-import bg.softuni.fitcom.models.entities.UserEntity;
 import bg.softuni.fitcom.models.service.UserRegisterServiceModel;
 import bg.softuni.fitcom.services.UserService;
 import org.springframework.context.annotation.Configuration;

@@ -244,6 +244,13 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
         return (int) Math.ceil(1.0 * resultsCount / pageSize);
     }
 
+    @Override
+    public void removeExerciseFromTraining(long id, String exerciseName) {
+
+        System.out.println(id);
+        System.out.println(exerciseName);
+    }
+
     private CommentViewModel toCommentViewModel(CommentEntity commentEntity) {
         return new CommentViewModel()
                 .setAuthor(commentEntity.getAuthor().getFirstName() + " " + commentEntity.getAuthor().getLastName())
@@ -292,20 +299,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     private List<ExerciseEntity> getExerciseEntities(TrainingProgramServiceModel serviceModel) {
         return serviceModel.getExercises()
                 .stream()
-                .map(e -> {
-                    Optional<ExerciseEntity> exerciseOpt = this.exerciseRepository.findByName(e.getName());
-                    ExerciseEntity exerciseEntity;
-
-                    if (exerciseOpt.isPresent()) {
-                        exerciseEntity = exerciseOpt.get()
-                                .setDescription(e.getDescription())
-                                .setVideoUrl(e.getVideoUrl());
-                    } else {
-                        exerciseEntity = this.modelMapper.map(e, ExerciseEntity.class);
-                    }
-
-                    return exerciseEntity;
-                })
+                .map(e -> this.modelMapper.map(e, ExerciseEntity.class))
                 .toList();
     }
 

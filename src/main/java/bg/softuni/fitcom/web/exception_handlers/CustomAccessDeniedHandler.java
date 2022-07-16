@@ -29,6 +29,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                     + request.getRequestURI());
         }
 
-        response.sendRedirect(request.getContextPath() + request.getRequestURI() + "/forbidden");
+        String redirectUrl = request.getContextPath() + request.getRequestURI();
+
+        if (redirectUrl.contains("add")) {
+            redirectUrl += "/forbidden";
+        } else {
+            redirectUrl = "/forbidden";
+        }
+
+        response.sendRedirect(redirectUrl);
     }
 }

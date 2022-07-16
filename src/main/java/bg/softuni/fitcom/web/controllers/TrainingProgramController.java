@@ -6,6 +6,7 @@ import bg.softuni.fitcom.models.enums.BodyPartEnum;
 import bg.softuni.fitcom.models.service.CommentAddServiceModel;
 import bg.softuni.fitcom.models.service.ExerciseAddServiceModel;
 import bg.softuni.fitcom.models.service.TrainingProgramServiceModel;
+import bg.softuni.fitcom.models.user.FitcomPrincipal;
 import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
 import bg.softuni.fitcom.models.view.TrainingProgramsOverviewViewModel;
 import bg.softuni.fitcom.services.TrainingProgramService;
@@ -22,11 +23,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,8 +123,9 @@ public class TrainingProgramController {
     }
 
     @GetMapping("/{id}/edit")
-    @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.username, #id)")
-    public String getEditTrainingProgram(@PathVariable long id, Model model) {
+    @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.name, #id)")
+    public String getEditTrainingProgram(@PathVariable long id, Model model, Authentication principal) {
+
         model.addAttribute("bodyParts", List.of(BodyPartEnum.ABS, BodyPartEnum.ARMS,
                 BodyPartEnum.BACK, BodyPartEnum.CHEST, BodyPartEnum.LEGS, BodyPartEnum.SHOULDERS, BodyPartEnum.OTHER));
 
@@ -128,7 +133,7 @@ public class TrainingProgramController {
 
         viewModel.getExercises()
                 .forEach(e -> {
-                    EXERCISES.add("name|" + e.getName());
+                    EXERCISES.add("email|" + e.getName());
                     EXERCISES.add("description|" + e.getDescription());
                     EXERCISES.add("video|" + e.getVideoUrl());
                 });
@@ -152,11 +157,12 @@ public class TrainingProgramController {
     }
 
     @PutMapping("/{id}/edit")
-    public String editTrainingProgram(@PathVariable long id, Authentication auth,
+    @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.name, #id)")
+    public String editTrainingProgram(@PathVariable long id, Authentication principal,
                                       @Valid TrainingProgramBindingModel bindingModel,
                                       BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, auth);
+        TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, principal);
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("trainingProgram", bindingModel);
@@ -170,24 +176,31 @@ public class TrainingProgramController {
         return "redirect:/training-programs";
     }
 
-    @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.username, #id)")
+    @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.name, #id)")
     @DeleteMapping("/{id}")
-    public String deleteTraining(@PathVariable long id) {
+    public String deleteTraining(@PathVariable long id, Authentication principal) {
         this.trainingProgramService.deleteProgram(id);
         return "redirect:/training-programs";
     }
 
+    @DeleteMapping("/{id}/remove-exercise")
+    @ResponseBody
+    public String removeExerciseFromTraining(@PathVariable long id, @RequestBody String exerciseName) {
+        this.trainingProgramService.removeExerciseFromTraining(id, exerciseName);
+        return "redirect:/training-programs/" + id;
+    }
+
     @PostMapping("/{id}/add-to-favourites")
-    @PreAuthorize("!@trainingProgramServiceImpl.isInUserFavourites(#principal.username, #id)")
-    public String addToFavourites(@PathVariable long id, Authentication auth) {
-        this.trainingProgramService.addToFavourites(id, auth.getName());
+    @PreAuthorize("!@trainingProgramServiceImpl.isInUserFavourites(#principal.name, #id)")
+    public String addToFavourites(@PathVariable long id, Authentication principal) {
+        this.trainingProgramService.addToFavourites(id, principal.getName());
         return "redirect:/training-programs/" + id;
     }
 
     @PostMapping("/{id}/remove-from-favourites")
-    @PreAuthorize("@trainingProgramServiceImpl.isInUserFavourites(#principal.username, #id)")
-    public String removeFromFavourites(@PathVariable long id, Authentication auth) {
-        this.trainingProgramService.removeFromFavourites(id, auth.getName());
+    @PreAuthorize("@trainingProgramServiceImpl.isInUserFavourites(#principal.name, #id)")
+    public String removeFromFavourites(@PathVariable long id, Authentication principal) {
+        this.trainingProgramService.removeFromFavourites(id, principal.getName());
         return "redirect:/training-programs/" + id;
     }
 

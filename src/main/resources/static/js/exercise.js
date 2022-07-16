@@ -1,6 +1,3 @@
-// document.getElementById('add-exercise')
-//     .addEventListener('click', addExercise);
-
 let exercisesNum = 0;
 
 function addExercise() {
@@ -60,4 +57,21 @@ function addExercise() {
     exercisesSection.appendChild(nameDiv);
     exercisesSection.appendChild(descriptionDiv);
     exercisesSection.appendChild(videoDiv);
+}
+
+async function removeExercise(trainingId, exerciseName) {
+    const customerKey = "vasko@abv.bg";
+    const customerSecret = "test";
+    const plainCredential = customerKey + ":" + customerSecret;
+    let encodedCredential = btoa(plainCredential);
+    let authorizationField = "Basic " + encodedCredential;
+
+    await fetch(`http://localhost:8080/training-programs/${trainingId}/remove-exercise`, {
+        method: 'DELETE',
+        headers: {
+            // 'Authorization': `${authorizationField}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(exerciseName)
+    })
 }

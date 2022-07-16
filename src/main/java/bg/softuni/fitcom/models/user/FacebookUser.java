@@ -1,4 +1,4 @@
-package bg.softuni.fitcom.social;
+package bg.softuni.fitcom.models.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
