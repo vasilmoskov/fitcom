@@ -45,14 +45,19 @@ textarea {
     width: 100%;
 }
 
-.add-ex-btn {
+.fitcom-small-btn {
     color: #344250;
     background-color: white;
     border: 1px solid #344250;
     border-radius: 6px;
 }
 
-.add-ex-btn:hover {
+.button-wrapper {
+    display: flex;
+    flex-basis: 100%;
+}
+
+.fitcom-small-btn:hover {
     color: white;
     background-color: #344250;
     border-radius: 6px;

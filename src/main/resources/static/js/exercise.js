@@ -1,5 +1,3 @@
-let exercisesNum = 0;
-
 function addExercise() {
     let nameDiv = document.createElement('div');
     nameDiv.classList.add('training-label-wrapper');
@@ -47,31 +45,56 @@ function addExercise() {
     videoDiv.appendChild(videoLabel);
     videoDiv.appendChild(videoInput);
 
+    let removeExerciseButton = document.createElement('button');
+    removeExerciseButton.textContent = 'Remove exercise';
+    removeExerciseButton.classList.add('fitcom-small-btn');
+    removeExerciseButton.addEventListener('click', onRemoveExercise);
+
     let exerciseNumH5 = document.createElement('h5');
     exerciseNumH5.classList.add('exercise-num');
-    exerciseNumH5.textContent = `New Exercise ${++exercisesNum}`;
+    exerciseNumH5.textContent = 'New Exercise';
+
+    let currentExerciseDiv = document.createElement('div');
+    currentExerciseDiv.appendChild(exerciseNumH5);
+    currentExerciseDiv.appendChild(removeExerciseButton);
+    currentExerciseDiv.appendChild(nameDiv);
+    currentExerciseDiv.appendChild(descriptionDiv);
+    currentExerciseDiv.appendChild(videoDiv);
 
     let exercisesSection = document.getElementById('exercises');
 
-    exercisesSection.appendChild(exerciseNumH5);
-    exercisesSection.appendChild(nameDiv);
-    exercisesSection.appendChild(descriptionDiv);
-    exercisesSection.appendChild(videoDiv);
+    exercisesSection.appendChild(currentExerciseDiv);
 }
 
-async function removeExercise(trainingId, exerciseName) {
-    const customerKey = "test@abv.bg";
-    const customerSecret = "test";
-    const plainCredential = customerKey + ":" + customerSecret;
-    let encodedCredential = btoa(plainCredential);
-    let authorizationField = "Basic " + encodedCredential;
+function onRemoveExercise(e) {
+    e.preventDefault();
+    e.target.parentElement.remove();
+}
 
-    await fetch(`http://localhost:8080/training-programs/${trainingId}/remove-exercise`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `${authorizationField}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(exerciseName)
-    })
+const csrfHeaderName = document.head.querySelector('[name="_csrf_header"]').content;
+const csrfHeaderValue = document.head.querySelector('[name="_csrf"]').content;
+
+async function removeExercise(trainingId, exerciseName, element) {
+    if (confirm('Are you sure you want to delete exercise ' + exerciseName + '?')) {
+        await fetch(`http://localhost:8080/training-programs/${trainingId}/remove-exercise`, {
+            method: 'DELETE',
+            headers: {
+                [csrfHeaderName]: csrfHeaderValue,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(exerciseName)
+        }).then(() => {
+            let buttonWrapper = element.parentElement;
+            let headerElement = buttonWrapper.previousElementSibling;
+            let nameDiv = buttonWrapper.nextElementSibling;
+            let descriptionDiv = nameDiv.nextElementSibling;
+            let videoDiv = descriptionDiv.nextElementSibling;
+
+            buttonWrapper.remove();
+            headerElement.remove();
+            nameDiv.remove();
+            descriptionDiv.remove();
+            videoDiv.remove();
+        })
+    }
 }

@@ -68,12 +68,22 @@
 
             <h4 class="training-label-wrapper">Exercises:</h4>
 
+            <p class="errors alert alert-danger"
+               th:if="${noExercises}">Your training must have at least one exercise with all fields filled!
+            </p>
+
             <div id="exercises"></div>
 
             <p class="invalid-feedback errors alert alert-danger"
                th:if="${#fields.hasErrors('exercisesData')}" th:errors="*{exercisesData}">Exercises required!</p>
 
-            <button class="add-ex-btn" type="button" onclick="addExercise()" id="add-exercise">Add exercise</button>
+            <div class="button-wrapper">
+                <button class="fitcom-small-btn"
+                        type="button"
+                        onclick="addExercise()" id="add-exercise"
+                >Add exercise
+                </button>
+            </div>
 
             <div class="input-field">
                 <input id="submit-btn" type="submit" value="Add training">

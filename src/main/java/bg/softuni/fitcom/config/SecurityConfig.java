@@ -43,8 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pending/**", "/stats").hasAuthority("ADMIN")
                 .antMatchers("/**").authenticated()
             .and()
-                .httpBasic()
-            .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
             .and()

@@ -6,12 +6,9 @@ import bg.softuni.fitcom.models.enums.BodyPartEnum;
 import bg.softuni.fitcom.models.service.CommentAddServiceModel;
 import bg.softuni.fitcom.models.service.ExerciseAddServiceModel;
 import bg.softuni.fitcom.models.service.TrainingProgramServiceModel;
-import bg.softuni.fitcom.models.user.FitcomPrincipal;
 import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
-import bg.softuni.fitcom.models.view.TrainingProgramsOverviewViewModel;
 import bg.softuni.fitcom.services.TrainingProgramService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,11 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 @Controller
@@ -42,7 +37,8 @@ import java.util.stream.IntStream;
 public class TrainingProgramController {
     private final ModelMapper modelMapper;
     private final TrainingProgramService trainingProgramService;
-    private static final List<String> EXERCISES = new ArrayList<>();
+
+    private List<String> exercisesData;
 
     public TrainingProgramController(ModelMapper modelMapper, TrainingProgramService trainingProgramService) {
         this.modelMapper = modelMapper;
@@ -110,6 +106,10 @@ public class TrainingProgramController {
 
         TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, auth);
 
+        if (serviceModel == null) {
+            redirectAttributes.addFlashAttribute("noExercises", true);
+        }
+
         if (bindingResult.hasErrors() || serviceModel == null) {
             redirectAttributes.addFlashAttribute("trainingProgram", bindingModel);
             redirectAttributes.addFlashAttribute(
@@ -131,19 +131,21 @@ public class TrainingProgramController {
 
         TrainingProgramDetailsViewModel viewModel = this.trainingProgramService.getTrainingProgram(id);
 
+        exercisesData = new ArrayList<>();
+
         viewModel.getExercises()
                 .forEach(e -> {
-                    EXERCISES.add("name|" + e.getName());
-                    EXERCISES.add("description|" + e.getDescription());
-                    EXERCISES.add("video|" + e.getVideoUrl());
+                    exercisesData.add("name|" + e.getName());
+                    exercisesData.add("description|" + e.getDescription());
+                    exercisesData.add("video|" + e.getVideoUrl());
                 });
 
         TrainingProgramBindingModel bindingModel = this.modelMapper
                 .map(viewModel, TrainingProgramBindingModel.class)
-                .setExercisesData(EXERCISES);
+                .setExercisesData(exercisesData);
 
         model.addAttribute("trainingProgram", bindingModel);
-        model.addAttribute("exerciseData", EXERCISES);
+        model.addAttribute("exercisesData", exercisesData);
         return "training-program-edit";
     }
 
@@ -151,7 +153,7 @@ public class TrainingProgramController {
     public String getEditWithErrors(@PathVariable long id, Model model) {
         model.addAttribute("bodyParts", List.of(BodyPartEnum.ABS, BodyPartEnum.ARMS,
                 BodyPartEnum.BACK, BodyPartEnum.CHEST, BodyPartEnum.LEGS, BodyPartEnum.SHOULDERS, BodyPartEnum.OTHER));
-        model.addAttribute("exerciseData", EXERCISES);
+        model.addAttribute("exercisesData", exercisesData);
 
         return "training-program-edit";
     }
@@ -183,11 +185,11 @@ public class TrainingProgramController {
         return "redirect:/training-programs";
     }
 
-    @DeleteMapping("/{id}/remove-exercise")
     @ResponseBody
-    public String removeExerciseFromTraining(@PathVariable long id, @RequestBody String exerciseName) {
+    @DeleteMapping("/{id}/remove-exercise")
+    public void removeExerciseFromTraining(@PathVariable long id,
+                                             @RequestBody String exerciseName) {
         this.trainingProgramService.removeExerciseFromTraining(id, exerciseName);
-        return "redirect:/training-programs/" + id;
     }
 
     @PostMapping("/{id}/add-to-favourites")

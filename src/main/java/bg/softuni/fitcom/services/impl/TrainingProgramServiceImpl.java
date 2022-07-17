@@ -244,11 +244,16 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
         return (int) Math.ceil(1.0 * resultsCount / pageSize);
     }
 
+    @Transactional
     @Override
     public void removeExerciseFromTraining(long id, String exerciseName) {
+        TrainingProgramEntity trainingProgram = trainingProgramRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No such training program."));
 
-        System.out.println(id);
-        System.out.println(exerciseName);
+        trainingProgram.getExercises()
+                .removeIf(e -> e.getName().equals(exerciseName.replaceAll("\"", "")));
+
+        trainingProgramRepository.save(trainingProgram);
     }
 
     private CommentViewModel toCommentViewModel(CommentEntity commentEntity) {
