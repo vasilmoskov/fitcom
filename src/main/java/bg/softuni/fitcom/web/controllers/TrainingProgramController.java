@@ -133,7 +133,7 @@ public class TrainingProgramController {
 
         viewModel.getExercises()
                 .forEach(e -> {
-                    EXERCISES.add("email|" + e.getName());
+                    EXERCISES.add("name|" + e.getName());
                     EXERCISES.add("description|" + e.getDescription());
                     EXERCISES.add("video|" + e.getVideoUrl());
                 });

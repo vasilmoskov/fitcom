@@ -19,7 +19,9 @@ public class ViewsInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         long delimiterCount = requestURI.chars().filter(ch -> ch == '/').count();
 
-        if (requestURI.contains("/training-programs/") && delimiterCount == 2) {
+        if (requestURI.contains("/training-programs/")
+                && !requestURI.contains("/add")
+                && delimiterCount == 2) {
             String index = requestURI.substring(requestURI.lastIndexOf("/") + 1);
 
             long indexParsed = Long.parseLong(index);
