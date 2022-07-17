@@ -104,6 +104,11 @@ public class TrainingProgramEntity extends BaseEntity {
         return this;
     }
 
+    public TrainingProgramEntity addExercise(ExerciseEntity exercise) {
+        exercises.add(exercise);
+        return this;
+    }
+
     public LocalDateTime getCreated() {
         return created;
     }

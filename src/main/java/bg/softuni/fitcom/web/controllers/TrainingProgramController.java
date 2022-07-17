@@ -166,7 +166,11 @@ public class TrainingProgramController {
 
         TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, principal);
 
-        if (bindingResult.hasErrors()) {
+        if (serviceModel == null) {
+            redirectAttributes.addFlashAttribute("noExercises", true);
+        }
+
+        if (bindingResult.hasErrors() || serviceModel == null) {
             redirectAttributes.addFlashAttribute("trainingProgram", bindingModel);
             redirectAttributes.addFlashAttribute(
                     "org.springframework.validation.BindingResult.trainingProgram", bindingResult);
@@ -189,6 +193,9 @@ public class TrainingProgramController {
     @DeleteMapping("/{id}/remove-exercise")
     public void removeExerciseFromTraining(@PathVariable long id,
                                              @RequestBody String exerciseName) {
+
+        exerciseName = exerciseName.replaceAll("\"", "");
+        removeExerciseFromExercisesData(exerciseName);
         this.trainingProgramService.removeExerciseFromTraining(id, exerciseName);
     }
 
@@ -285,6 +292,21 @@ public class TrainingProgramController {
                     .toList();
 
             model.addAttribute("pageNumbers", pageNumbers);
+        }
+    }
+
+    private void removeExerciseFromExercisesData(String name) {
+        String exercise = exercisesData
+                .stream()
+                .filter(e -> e.contains(name))
+                .findFirst()
+                .orElse(null);
+
+        if (exercise != null) {
+            int exerciseIndex = exercisesData.indexOf(exercise);
+            exercisesData.remove(exerciseIndex);
+            exercisesData.remove(exerciseIndex);
+            exercisesData.remove(exerciseIndex);
         }
     }
 }

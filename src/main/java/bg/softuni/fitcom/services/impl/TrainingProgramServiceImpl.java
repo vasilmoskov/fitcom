@@ -139,7 +139,6 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     }
 
     @Override
-//    @Transactional
     public TrainingProgramServiceModel updateProgram(TrainingProgramServiceModel serviceModel) {
         List<ExerciseEntity> exercises = getExerciseEntities(serviceModel);
         List<BodyPartEntity> bodyParts = getBodyPartEntities(serviceModel);
@@ -250,9 +249,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
         TrainingProgramEntity trainingProgram = trainingProgramRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No such training program."));
 
-        trainingProgram.getExercises()
-                .removeIf(e -> e.getName().equals(exerciseName.replaceAll("\"", "")));
-
+        trainingProgram.getExercises().removeIf(e -> e.getName().equals(exerciseName));
         trainingProgramRepository.save(trainingProgram);
     }
 
