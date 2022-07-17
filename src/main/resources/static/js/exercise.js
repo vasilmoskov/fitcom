@@ -60,7 +60,7 @@ function addExercise() {
 }
 
 async function removeExercise(trainingId, exerciseName) {
-    const customerKey = "vasko@abv.bg";
+    const customerKey = "test@abv.bg";
     const customerSecret = "test";
     const plainCredential = customerKey + ":" + customerSecret;
     let encodedCredential = btoa(plainCredential);
@@ -69,7 +69,7 @@ async function removeExercise(trainingId, exerciseName) {
     await fetch(`http://localhost:8080/training-programs/${trainingId}/remove-exercise`, {
         method: 'DELETE',
         headers: {
-            // 'Authorization': `${authorizationField}`,
+            'Authorization': `${authorizationField}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(exerciseName)
