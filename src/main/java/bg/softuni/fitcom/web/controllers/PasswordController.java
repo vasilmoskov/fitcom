@@ -2,9 +2,9 @@ package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.exceptions.TokenExpiredException;
 import bg.softuni.fitcom.models.service.PasswordServiceModel;
-import bg.softuni.fitcom.models.service.ResetTokenServiceModel;
+import bg.softuni.fitcom.models.service.TokenServiceModel;
 import bg.softuni.fitcom.services.PasswordService;
-import bg.softuni.fitcom.services.ResetTokenService;
+import bg.softuni.fitcom.services.TokenService;
 import bg.softuni.fitcom.util.OnPasswordResetEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,11 +24,11 @@ import java.util.Date;
 public class PasswordController {
 
     private final ApplicationEventPublisher eventPublisher;
-    private final ResetTokenService resetTokenService;
+    private final TokenService resetTokenService;
     private final PasswordEncoder passwordEncoder;
     private final PasswordService passwordService;
 
-    public PasswordController(ApplicationEventPublisher eventPublisher, ResetTokenService resetTokenService,
+    public PasswordController(ApplicationEventPublisher eventPublisher, TokenService resetTokenService,
                               PasswordEncoder passwordEncoder, PasswordService passwordService) {
         this.eventPublisher = eventPublisher;
         this.resetTokenService = resetTokenService;
@@ -72,7 +72,7 @@ public class PasswordController {
             return "redirect:/password-reset?token=" + token;
         }
 
-        ResetTokenServiceModel tokenServiceModel = this.resetTokenService.getToken(token);
+        TokenServiceModel tokenServiceModel = this.resetTokenService.getToken(token);
         this.resetTokenService.deleteToken(tokenServiceModel.getId());
 
         if (tokenServiceModel.getExpiryDate().before(new Date())) {

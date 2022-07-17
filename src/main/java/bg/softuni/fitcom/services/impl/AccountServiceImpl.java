@@ -5,14 +5,14 @@ import bg.softuni.fitcom.exceptions.TokenExpiredException;
 import bg.softuni.fitcom.models.entities.AccountEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.models.entities.VerificationTokenEntity;
+import bg.softuni.fitcom.models.entities.TokenEntity;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.service.AccountRegisterServiceModel;
 import bg.softuni.fitcom.repositories.AccountRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
 import bg.softuni.fitcom.repositories.UserRepository;
 import bg.softuni.fitcom.services.AccountService;
-import bg.softuni.fitcom.repositories.VerificationTokenRepository;
+import bg.softuni.fitcom.repositories.TokenRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    private final VerificationTokenRepository verificationTokenRepository;
+    private final TokenRepository verificationTokenRepository;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(VerificationTokenRepository verificationTokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(TokenRepository verificationTokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.verificationTokenRepository = verificationTokenRepository;
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createVerificationToken(AccountRegisterServiceModel serviceModel, String token) {
-        VerificationTokenEntity verificationToken = new VerificationTokenEntity()
+        TokenEntity verificationToken = new TokenEntity()
                 .setToken(token)
                 .setExpiryDate()
                 .setEmail(serviceModel.getEmail());
@@ -76,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void confirmAccount(String token) {
-        VerificationTokenEntity verificationToken = this.verificationTokenRepository.findByToken(token).get();
+        TokenEntity verificationToken = this.verificationTokenRepository.findByToken(token).get();
 
         if (verificationToken.getExpiryDate().before(new Date())) {
             throw new TokenExpiredException();

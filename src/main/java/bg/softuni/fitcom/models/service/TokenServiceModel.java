@@ -2,7 +2,7 @@ package bg.softuni.fitcom.models.service;
 
 import java.util.Date;
 
-public class ResetTokenServiceModel {
+public class TokenServiceModel {
     private long id;
     private String token;
     private String email;
@@ -12,7 +12,7 @@ public class ResetTokenServiceModel {
         return token;
     }
 
-    public ResetTokenServiceModel setToken(String token) {
+    public TokenServiceModel setToken(String token) {
         this.token = token;
         return this;
     }
@@ -21,7 +21,7 @@ public class ResetTokenServiceModel {
         return email;
     }
 
-    public ResetTokenServiceModel setEmail(String email) {
+    public TokenServiceModel setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -30,7 +30,7 @@ public class ResetTokenServiceModel {
         return expiryDate;
     }
 
-    public ResetTokenServiceModel setExpiryDate(Date expiryDate) {
+    public TokenServiceModel setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
         return this;
     }
@@ -39,7 +39,7 @@ public class ResetTokenServiceModel {
         return id;
     }
 
-    public ResetTokenServiceModel setId(long id) {
+    public TokenServiceModel setId(long id) {
         this.id = id;
         return this;
     }
