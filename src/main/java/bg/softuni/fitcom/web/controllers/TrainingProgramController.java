@@ -105,12 +105,20 @@ public class TrainingProgramController {
                              RedirectAttributes redirectAttributes, Authentication auth) {
 
         TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, auth);
+        exercisesData = new ArrayList<>();
 
         if (serviceModel == null) {
             redirectAttributes.addFlashAttribute("noExercises", true);
+        } else {
+            serviceModel.getExercises().forEach(e -> {
+                exercisesData.add("name|" + e.getName());
+                exercisesData.add("description|" + e.getDescription());
+                exercisesData.add("video|" + e.getVideoUrl());
+            });
         }
 
         if (bindingResult.hasErrors() || serviceModel == null) {
+            redirectAttributes.addFlashAttribute("exercisesData", exercisesData);
             redirectAttributes.addFlashAttribute("trainingProgram", bindingModel);
             redirectAttributes.addFlashAttribute(
                     "org.springframework.validation.BindingResult.trainingProgram", bindingResult);
@@ -153,7 +161,6 @@ public class TrainingProgramController {
     public String getEditWithErrors(@PathVariable long id, Model model) {
         model.addAttribute("bodyParts", List.of(BodyPartEnum.ABS, BodyPartEnum.ARMS,
                 BodyPartEnum.BACK, BodyPartEnum.CHEST, BodyPartEnum.LEGS, BodyPartEnum.SHOULDERS, BodyPartEnum.OTHER));
-        model.addAttribute("exercisesData", exercisesData);
 
         return "training-program-edit";
     }
@@ -171,6 +178,7 @@ public class TrainingProgramController {
         }
 
         if (bindingResult.hasErrors() || serviceModel == null) {
+            redirectAttributes.addFlashAttribute("exercisesData", exercisesData);
             redirectAttributes.addFlashAttribute("trainingProgram", bindingModel);
             redirectAttributes.addFlashAttribute(
                     "org.springframework.validation.BindingResult.trainingProgram", bindingResult);
