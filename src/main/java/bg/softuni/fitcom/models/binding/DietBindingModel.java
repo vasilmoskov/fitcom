@@ -1,6 +1,6 @@
 package bg.softuni.fitcom.models.binding;
 
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,8 +14,8 @@ public class DietBindingModel {
     @NotBlank(message = "Your diet should have a description.")
     private String description;
 
-    @NotNull(message = "Please select the aim of your diet.")
-    private PurposeEnum purpose;
+    @NotNull(message = "Please select the goal of your diet.")
+    private GoalEnum goal;
 
     public long getId() {
         return id;
@@ -44,12 +44,12 @@ public class DietBindingModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public DietBindingModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public DietBindingModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 }

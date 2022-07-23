@@ -1,13 +1,13 @@
 package bg.softuni.fitcom.models.service;
 
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 public class DietServiceModel {
     private long id;
     private String title;
     private String description;
     private String author;
-    private PurposeEnum purpose;
+    private GoalEnum goal;
 
     public String getTitle() {
         return title;
@@ -36,12 +36,12 @@ public class DietServiceModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public DietServiceModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public DietServiceModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 

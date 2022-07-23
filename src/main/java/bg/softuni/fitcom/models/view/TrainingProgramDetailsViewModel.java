@@ -1,7 +1,7 @@
 package bg.softuni.fitcom.models.view;
 
 import bg.softuni.fitcom.models.enums.BodyPartEnum;
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class TrainingProgramDetailsViewModel {
     private String author;
     private boolean canModify;
     private String created;
-    private PurposeEnum purpose;
+    private GoalEnum goal;
     private String pictureUrl;
     private List<BodyPartEnum> bodyParts;
     private List<ExerciseOverviewViewModel> exercises;
@@ -92,12 +92,12 @@ public class TrainingProgramDetailsViewModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public TrainingProgramDetailsViewModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public TrainingProgramDetailsViewModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 

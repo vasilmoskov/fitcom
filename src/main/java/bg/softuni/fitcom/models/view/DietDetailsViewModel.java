@@ -1,7 +1,6 @@
 package bg.softuni.fitcom.models.view;
 
-import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 public class DietDetailsViewModel {
     private long id;
@@ -9,7 +8,7 @@ public class DietDetailsViewModel {
     private String description;
     private String created;
     private String author;
-    private PurposeEnum purpose;
+    private GoalEnum goal;
     private String pictureUrl;
 
     public String getTitle() {
@@ -57,12 +56,12 @@ public class DietDetailsViewModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public DietDetailsViewModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public DietDetailsViewModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 

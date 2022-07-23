@@ -1,22 +1,21 @@
 package bg.softuni.fitcom;
 
 import bg.softuni.fitcom.models.entities.BodyPartEntity;
-import bg.softuni.fitcom.models.entities.PurposeEntity;
+import bg.softuni.fitcom.models.entities.GoalEntity;
 import bg.softuni.fitcom.models.entities.ExerciseEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.UserEntity;
 import bg.softuni.fitcom.models.entities.TrainingProgramEntity;
 import bg.softuni.fitcom.models.enums.BodyPartEnum;
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.repositories.BodyPartRepository;
 import bg.softuni.fitcom.repositories.ExerciseRepository;
-import bg.softuni.fitcom.repositories.PurposeRepository;
+import bg.softuni.fitcom.repositories.GoalRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
 import bg.softuni.fitcom.repositories.TrainingProgramRepository;
 import bg.softuni.fitcom.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,17 +26,17 @@ public class DbInitializr implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BodyPartRepository bodyPartRepository;
     private final ExerciseRepository exerciseRepository;
-    private final PurposeRepository purposeRepository;
+    private final GoalRepository goalRepository;
     private final TrainingProgramRepository trainingProgramRepository;
 
     public DbInitializr(RoleRepository roleRepository, UserRepository userRepository,
                         BodyPartRepository bodyPartRepository, ExerciseRepository exerciseRepository,
-                        PurposeRepository purposeRepository, TrainingProgramRepository trainingProgramRepository) {
+                        GoalRepository goalRepository, TrainingProgramRepository trainingProgramRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.bodyPartRepository = bodyPartRepository;
         this.exerciseRepository = exerciseRepository;
-        this.purposeRepository = purposeRepository;
+        this.goalRepository = goalRepository;
         this.trainingProgramRepository = trainingProgramRepository;
     }
 
@@ -51,7 +50,7 @@ public class DbInitializr implements CommandLineRunner {
         seedUsers();
         seedBodyParts();
         seedExercises();
-        seedPurposes();
+        seedGoals();
         seedTrainingPrograms();
     }
 
@@ -144,14 +143,14 @@ public class DbInitializr implements CommandLineRunner {
         this.exerciseRepository.saveAll(List.of(dumbbellCrunch, plank, crossover));
     }
 
-    private void seedPurposes() {
-        PurposeEntity gainMass = new PurposeEntity()
-                .setName(PurposeEnum.GAIN_MASS);
+    private void seedGoals() {
+        GoalEntity gainMass = new GoalEntity()
+                .setName(GoalEnum.GAIN_MASS);
 
-        PurposeEntity loseFat = new PurposeEntity()
-                .setName(PurposeEnum.LOSE_FAT);
+        GoalEntity loseFat = new GoalEntity()
+                .setName(GoalEnum.LOSE_FAT);
 
-        this.purposeRepository.saveAll(List.of(gainMass, loseFat));
+        this.goalRepository.saveAll(List.of(gainMass, loseFat));
     }
 
     private void seedTrainingPrograms() {
@@ -162,7 +161,7 @@ public class DbInitializr implements CommandLineRunner {
                         this.exerciseRepository.getById(2L), this.exerciseRepository.getById(3L)))
                 .setCreated(LocalDateTime.now())
                 .setBodyParts(List.of(this.bodyPartRepository.findByName(BodyPartEnum.CHEST).get()))
-                .setPurpose(this.purposeRepository.getById(1L));
+                .setGoal(this.goalRepository.getById(1L));
 
         TrainingProgramEntity trainingProgramAbs = new TrainingProgramEntity()
                 .setTitle("Abs Workout")
@@ -171,7 +170,7 @@ public class DbInitializr implements CommandLineRunner {
                         this.exerciseRepository.getById(5L)))
                 .setCreated(LocalDateTime.now())
                 .setBodyParts(List.of(this.bodyPartRepository.findByName(BodyPartEnum.CHEST).get()))
-                .setPurpose(this.purposeRepository.getById(2L));
+                .setGoal(this.goalRepository.getById(2L));
 
         this.trainingProgramRepository.save(trainingProgramChest);
         this.trainingProgramRepository.save(trainingProgramAbs);

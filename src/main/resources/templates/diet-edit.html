@@ -39,24 +39,24 @@
                    th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description is required!</p>
             </div>
 
-            <p class="training-label-wrapper">Aim of this training:</p>
+            <p class="training-label-wrapper">Goal of this training:</p>
 
             <div class="radio-wrapper">
                 <input type="radio"
                        id="lose_fat"
-                       th:field="*{purpose}"
+                       th:field="*{goal}"
                        th:errorclass="is-invalid"
                        th:value="LOSE_FAT">
                 <label for="lose_fat">Lose Fat</label>
                 <input type="radio"
                        id="gain_mass"
-                       th:field="*{purpose}"
+                       th:field="*{goal}"
                        th:errorclass="is-invalid"
                        th:value="GAIN_MASS">
                 <label for="gain_mass">Gain Mass</label>
 
                 <p class="invalid-feedback errors alert alert-danger"
-                   th:if="${#fields.hasErrors('purpose')}" th:errors="*{purpose}">Goal is required!</p>
+                   th:if="${#fields.hasErrors('goal')}" th:errors="*{goal}">Goal is required!</p>
             </div>
 
             <div class="input-field">

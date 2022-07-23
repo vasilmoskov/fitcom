@@ -4,7 +4,7 @@ import bg.softuni.fitcom.exceptions.ResourceNotFoundException;
 import bg.softuni.fitcom.models.entities.BodyPartEntity;
 import bg.softuni.fitcom.models.entities.CommentEntity;
 import bg.softuni.fitcom.models.entities.ExerciseEntity;
-import bg.softuni.fitcom.models.entities.PurposeEntity;
+import bg.softuni.fitcom.models.entities.GoalEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.TrainingProgramEntity;
 import bg.softuni.fitcom.models.entities.UserEntity;
@@ -18,8 +18,7 @@ import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
 import bg.softuni.fitcom.models.view.TrainingProgramsOverviewViewModel;
 import bg.softuni.fitcom.repositories.BodyPartRepository;
 import bg.softuni.fitcom.repositories.CommentRepository;
-import bg.softuni.fitcom.repositories.ExerciseRepository;
-import bg.softuni.fitcom.repositories.PurposeRepository;
+import bg.softuni.fitcom.repositories.GoalRepository;
 import bg.softuni.fitcom.repositories.TrainingProgramRepository;
 import bg.softuni.fitcom.repositories.UserRepository;
 import bg.softuni.fitcom.services.TrainingProgramService;
@@ -35,26 +34,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class TrainingProgramServiceImpl implements TrainingProgramService {
     private final TrainingProgramRepository trainingProgramRepository;
-    private final ExerciseRepository exerciseRepository;
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
-    private final PurposeRepository purposeRepository;
+    private final GoalRepository goalRepository;
     private final BodyPartRepository bodyPartRepository;
 
-    public TrainingProgramServiceImpl(TrainingProgramRepository trainingProgramRepository, ExerciseRepository exerciseRepository, CommentRepository commentRepository, ModelMapper modelMapper, UserRepository userRepository, PurposeRepository purposeRepository, BodyPartRepository bodyPartRepository) {
+    public TrainingProgramServiceImpl(TrainingProgramRepository trainingProgramRepository,
+                                      CommentRepository commentRepository, UserRepository userRepository,
+                                      GoalRepository goalRepository, BodyPartRepository bodyPartRepository,
+                                      ModelMapper modelMapper) {
         this.trainingProgramRepository = trainingProgramRepository;
-        this.exerciseRepository = exerciseRepository;
         this.commentRepository = commentRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
-        this.purposeRepository = purposeRepository;
+        this.goalRepository = goalRepository;
         this.bodyPartRepository = bodyPartRepository;
     }
 
@@ -143,9 +142,9 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
         List<ExerciseEntity> exercises = getExerciseEntities(serviceModel);
         List<BodyPartEntity> bodyParts = getBodyPartEntities(serviceModel);
         UserEntity author = getAuthor(serviceModel);
-        PurposeEntity purposeEntity = getPurposeEntity(serviceModel);
+        GoalEntity goalEntity = getGoalEntity(serviceModel);
         TrainingProgramEntity trainingProgram = buildTrainingProgramEntity(serviceModel, exercises,
-                bodyParts, author, purposeEntity);
+                bodyParts, author, goalEntity);
 
         if (trainingProgram.getId() == 0) {
             trainingProgram.setCreated(LocalDateTime.now());
@@ -264,21 +263,21 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
                                                              List<ExerciseEntity> exercises,
                                                              List<BodyPartEntity> bodyParts,
                                                              UserEntity author,
-                                                             PurposeEntity purposeEntity) {
+                                                             GoalEntity goalEntity) {
         return this.trainingProgramRepository
                 .findById(serviceModel.getId())
                 .orElseGet(TrainingProgramEntity::new)
                 .setTitle(serviceModel.getTitle())
                 .setDescription(serviceModel.getDescription())
                 .setAuthor(author)
-                .setPurpose(purposeEntity)
+                .setGoal(goalEntity)
                 .setBodyParts(bodyParts)
                 .setExercises(exercises);
     }
 
-    private PurposeEntity getPurposeEntity(TrainingProgramServiceModel serviceModel) {
-        return this.purposeRepository.findByName(serviceModel.getPurpose())
-                .orElseThrow(() -> new ResourceNotFoundException("No such purpose."));
+    private GoalEntity getGoalEntity(TrainingProgramServiceModel serviceModel) {
+        return this.goalRepository.findByName(serviceModel.getGoal())
+                .orElseThrow(() -> new ResourceNotFoundException("No such goal."));
     }
 
     private UserEntity getAuthor(TrainingProgramServiceModel serviceModel) {
@@ -343,7 +342,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
                 .setId(entity.getId())
                 .setTitle(entity.getTitle())
                 .setDescription(entity.getDescription())
-                .setPurpose(entity.getPurpose().getName())
+                .setGoal(entity.getGoal().getName())
                 .setBodyParts(bodyParts)
                 .setPictureUrl(entity.getBodyParts().get(0).getPictureUrl())
                 .setAuthor(entity.getAuthor().getFirstName() + " " + entity.getAuthor().getLastName())

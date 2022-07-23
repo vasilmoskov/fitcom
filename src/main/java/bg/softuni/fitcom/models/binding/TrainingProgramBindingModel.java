@@ -1,7 +1,7 @@
 package bg.softuni.fitcom.models.binding;
 
 import bg.softuni.fitcom.models.enums.BodyPartEnum;
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,8 +17,8 @@ public class TrainingProgramBindingModel {
     @NotBlank(message = "Your training should have a description.")
     private String description;
 
-    @NotNull(message = "Please select the aim of your training.")
-    private PurposeEnum purpose;
+    @NotNull(message = "Please select the goal of your training.")
+    private GoalEnum goal;
 
     List<BodyPartEnum> bodyParts;
 
@@ -53,12 +53,12 @@ public class TrainingProgramBindingModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public TrainingProgramBindingModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public TrainingProgramBindingModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 

@@ -1,6 +1,6 @@
 package bg.softuni.fitcom.models.entities;
 
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,16 +8,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "purposes")
-public class PurposeEntity extends BaseEntity {
+@Table(name = "goals")
+public class GoalEntity extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
-    private PurposeEnum name;
+    private GoalEnum name;
 
-    public PurposeEnum getName() {
+    public GoalEnum getName() {
         return name;
     }
 
-    public PurposeEntity setName(PurposeEnum name) {
+    public GoalEntity setName(GoalEnum name) {
         this.name = name;
         return this;
     }

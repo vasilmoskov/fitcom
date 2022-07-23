@@ -3,7 +3,7 @@ package bg.softuni.fitcom.services.impl;
 import bg.softuni.fitcom.exceptions.ResourceNotFoundException;
 import bg.softuni.fitcom.models.entities.CommentEntity;
 import bg.softuni.fitcom.models.entities.DietEntity;
-import bg.softuni.fitcom.models.entities.PurposeEntity;
+import bg.softuni.fitcom.models.entities.GoalEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.UserEntity;
 import bg.softuni.fitcom.models.enums.RoleEnum;
@@ -14,12 +14,11 @@ import bg.softuni.fitcom.models.view.DietDetailsViewModel;
 import bg.softuni.fitcom.models.view.DietOverviewViewModel;
 import bg.softuni.fitcom.repositories.CommentRepository;
 import bg.softuni.fitcom.repositories.DietRepository;
-import bg.softuni.fitcom.repositories.PurposeRepository;
+import bg.softuni.fitcom.repositories.GoalRepository;
 import bg.softuni.fitcom.repositories.UserRepository;
 import bg.softuni.fitcom.services.DietService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +34,16 @@ public class DietServiceImpl implements DietService {
 
     private final DietRepository dietRepository;
     private final UserRepository userRepository;
-    private final PurposeRepository purposeRepository;
+    private final GoalRepository goalRepository;
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper;
 
     public DietServiceImpl(DietRepository dietRepository, UserRepository userRepository,
-                           PurposeRepository purposeRepository, CommentRepository commentRepository,
+                           GoalRepository goalRepository, CommentRepository commentRepository,
                            ModelMapper modelMapper) {
         this.dietRepository = dietRepository;
         this.userRepository = userRepository;
-        this.purposeRepository = purposeRepository;
+        this.goalRepository = goalRepository;
         this.commentRepository = commentRepository;
         this.modelMapper = modelMapper;
     }
@@ -61,8 +60,8 @@ public class DietServiceImpl implements DietService {
         UserEntity userEntity = this.userRepository.findByEmail(serviceModel.getAuthor())
                 .orElseThrow(() -> new ResourceNotFoundException("No such user!"));
 
-        PurposeEntity purposeEntity = this.purposeRepository.findByName(serviceModel.getPurpose())
-                .orElseThrow(() -> new ResourceNotFoundException("No such purpose!"));
+        GoalEntity goalEntity = this.goalRepository.findByName(serviceModel.getGoal())
+                .orElseThrow(() -> new ResourceNotFoundException("No such goal!"));
 
         DietEntity dietEntity = this.dietRepository
                 .findById(serviceModel.getId())
@@ -70,7 +69,7 @@ public class DietServiceImpl implements DietService {
                 .setTitle(serviceModel.getTitle())
                 .setDescription(serviceModel.getDescription())
                 .setAuthor(userEntity)
-                .setPurpose(purposeEntity);
+                .setGoal(goalEntity);
 
         if (dietEntity.getId() == 0) {
             dietEntity.setCreated(LocalDateTime.now());
@@ -187,7 +186,7 @@ public class DietServiceImpl implements DietService {
                         ? dietEntity.getDescription().substring(0, 50) + "..."
                         : dietEntity.getDescription())
                 .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")))
-                .setPictureUrl(dietEntity.getPurpose().getName().name().equals("GAIN_MASS")
+                .setPictureUrl(dietEntity.getGoal().getName().name().equals("GAIN_MASS")
                         ? GAIN_MASS_PICTURE
                         : LOSE_FAT_PICTURE);
     }
@@ -204,10 +203,10 @@ public class DietServiceImpl implements DietService {
                 .setId(dietEntity.getId())
                 .setTitle(dietEntity.getTitle())
                 .setDescription(dietEntity.getDescription())
-                .setPurpose(dietEntity.getPurpose().getName())
+                .setGoal(dietEntity.getGoal().getName())
                 .setAuthor(dietEntity.getAuthor().getFirstName() + " " + dietEntity.getAuthor().getLastName())
                 .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")))
-                .setPictureUrl(dietEntity.getPurpose().getName().name().equals("GAIN_MASS")
+                .setPictureUrl(dietEntity.getGoal().getName().name().equals("GAIN_MASS")
                         ? GAIN_MASS_PICTURE
                         : LOSE_FAT_PICTURE);
     }

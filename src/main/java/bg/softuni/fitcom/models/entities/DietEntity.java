@@ -23,7 +23,7 @@ public class DietEntity extends BaseEntity {
     private UserEntity author;
 
     @ManyToOne
-    private PurposeEntity purpose;
+    private GoalEntity goal;
 
     public String getTitle() {
         return title;
@@ -52,12 +52,12 @@ public class DietEntity extends BaseEntity {
         return this;
     }
 
-    public PurposeEntity getPurpose() {
-        return purpose;
+    public GoalEntity getGoal() {
+        return goal;
     }
 
-    public DietEntity setPurpose(PurposeEntity category) {
-        this.purpose = category;
+    public DietEntity setGoal(GoalEntity category) {
+        this.goal = category;
         return this;
     }
 

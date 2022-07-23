@@ -1,8 +1,5 @@
 package bg.softuni.fitcom.models.entities;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +29,7 @@ public class TrainingProgramEntity extends BaseEntity {
     private UserEntity author;
 
     @ManyToOne
-    private PurposeEntity purpose;
+    private GoalEntity goal;
 
     @ManyToMany
     @JoinTable(name = "training_programs_body_parts",
@@ -77,12 +74,12 @@ public class TrainingProgramEntity extends BaseEntity {
         return this;
     }
 
-    public PurposeEntity getPurpose() {
-        return purpose;
+    public GoalEntity getGoal() {
+        return goal;
     }
 
-    public TrainingProgramEntity setPurpose(PurposeEntity category) {
-        this.purpose = category;
+    public TrainingProgramEntity setGoal(GoalEntity category) {
+        this.goal = category;
         return this;
     }
 

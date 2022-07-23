@@ -1,9 +1,8 @@
 package bg.softuni.fitcom.models.service;
 
 import bg.softuni.fitcom.models.enums.BodyPartEnum;
-import bg.softuni.fitcom.models.enums.PurposeEnum;
+import bg.softuni.fitcom.models.enums.GoalEnum;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class TrainingProgramServiceModel {
@@ -11,7 +10,7 @@ public class TrainingProgramServiceModel {
     private String title;
     private String description;
     private String author;
-    private PurposeEnum purpose;
+    private GoalEnum goal;
     private List<BodyPartEnum> bodyParts;
     private List<ExerciseAddServiceModel> exercises;
 
@@ -51,12 +50,12 @@ public class TrainingProgramServiceModel {
         return this;
     }
 
-    public PurposeEnum getPurpose() {
-        return purpose;
+    public GoalEnum getGoal() {
+        return goal;
     }
 
-    public TrainingProgramServiceModel setPurpose(PurposeEnum purpose) {
-        this.purpose = purpose;
+    public TrainingProgramServiceModel setGoal(GoalEnum goal) {
+        this.goal = goal;
         return this;
     }
 
