@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -32,14 +34,16 @@ public class AccountController {
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final LocaleResolver localeResolver;
     private final PasswordEncoder passwordEncoder;
 
     public AccountController(AccountService accountService, CloudinaryService cloudinaryService, ModelMapper modelMapper,
-                             ApplicationEventPublisher eventPublisher, PasswordEncoder passwordEncoder) {
+                             ApplicationEventPublisher eventPublisher, LocaleResolver localeResolver, PasswordEncoder passwordEncoder) {
         this.accountService = accountService;
         this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
         this.eventPublisher = eventPublisher;
+        this.localeResolver = localeResolver;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -60,7 +64,8 @@ public class AccountController {
 
     @PostMapping
     public String doRegister(@Valid AccountRegisterBindingModel bindingModel, BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) throws IOException {
+                             RedirectAttributes redirectAttributes,
+                             HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("registerModel", bindingModel);
             redirectAttributes.addFlashAttribute(
@@ -84,7 +89,8 @@ public class AccountController {
         }
 
         this.accountService.create(serviceModel);
-        this.eventPublisher.publishEvent(new OnCreateAccountEvent(serviceModel, ""));
+        this.eventPublisher.publishEvent(new OnCreateAccountEvent(serviceModel, "",
+                localeResolver.resolveLocale(request)));
 
         return "email-sent";
     }
