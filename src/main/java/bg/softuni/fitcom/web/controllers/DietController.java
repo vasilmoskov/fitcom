@@ -105,8 +105,6 @@ public class DietController {
         return "redirect:/diets/" + id;
     }
 
-    // Copied:
-
     @GetMapping("/{id}/edit")
     @PreAuthorize("@dietServiceImpl.canModify(#principal.name, #id)")
     public String getEditDiet(@PathVariable long id, Model model, Authentication principal) {

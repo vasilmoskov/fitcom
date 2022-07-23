@@ -27,6 +27,9 @@ import java.util.List;
 
 @Service
 public class DietServiceImpl implements DietService {
+    private static final String GAIN_MASS_PICTURE = "https://res.cloudinary.com/dilbpiicv/image/upload/v1658571190/gain-mass-diet_nrmgb9.webp";
+    private static final String LOSE_FAT_PICTURE = "https://res.cloudinary.com/dilbpiicv/image/upload/v1658572091/diet-lose-fat-6_nt1lef.jpg";
+
     private final DietRepository dietRepository;
     private final UserRepository userRepository;
     private final PurposeRepository purposeRepository;
@@ -181,7 +184,10 @@ public class DietServiceImpl implements DietService {
                 .setDescription(dietEntity.getDescription().length() > 50
                         ? dietEntity.getDescription().substring(0, 50) + "..."
                         : dietEntity.getDescription())
-                .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")));
+                .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")))
+                .setPictureUrl(dietEntity.getPurpose().getName().name().equals("GAIN_MASS")
+                        ? GAIN_MASS_PICTURE
+                        : LOSE_FAT_PICTURE);
     }
 
     private CommentViewModel toCommentViewModel(CommentEntity commentEntity) {
@@ -198,7 +204,10 @@ public class DietServiceImpl implements DietService {
                 .setDescription(dietEntity.getDescription())
                 .setPurpose(dietEntity.getPurpose().getName())
                 .setAuthor(dietEntity.getAuthor().getFirstName() + " " + dietEntity.getAuthor().getLastName())
-                .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")));
+                .setCreated(dietEntity.getCreated().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")))
+                .setPictureUrl(dietEntity.getPurpose().getName().name().equals("GAIN_MASS")
+                        ? GAIN_MASS_PICTURE
+                        : LOSE_FAT_PICTURE);
     }
 
     private boolean isAdmin(UserEntity userEntity) {

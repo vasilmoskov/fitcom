@@ -13,17 +13,19 @@
     </div>
 
     <section class="trainings-wrapper">
-        <div th:if="${!diets.isEmpty()}" th:each="d : ${diets}" th:object="${d}" class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title" th:text="*{title}">Title</h5>
-                <p class="author" th:text="*{author}"></p>
-                <p class="posted-on" th:text="*{created}"></p>
-                <p class="card-text" th:text="*{description}">Description</p>
+        <p th:if="${diets.isEmpty()}">There are no diets yet!</p>
+
+        <div th:each="d : ${diets}" th:object="${d}" class="card bg-dark text-white" style="width: 25rem;">
+            <img th:src="@{*{pictureUrl}}" alt="bodyPart" class="card-img blur-img">
+            <div class="card-img-overlay">
+                <h5 class="card-title card-content" th:text="*{title}">Title</h5>
+                <p class="author card-content" th:text="*{author}"></p>
+                <p class="posted-on card-content" th:text="*{created}"></p>
+                <p class="card-text card-content" th:text="*{description}">Description</p>
                 <a th:href="@{/diets/{id}(id=*{id})}" class="btn btn-primary">Taste this diet</a>
             </div>
         </div>
 
-        <p th:if="${diets.isEmpty()}">There are no diets yet!</p>
     </section>
 
     <div class="add-training">

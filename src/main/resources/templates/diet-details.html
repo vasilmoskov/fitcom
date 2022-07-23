@@ -9,15 +9,19 @@
 <main>
 
     <div class="stepping-title">
-        <h1 class="main-title">Get ready to workout!</h1>
+        <h1 class="main-title">Get your meal ready!</h1>
     </div>
 
     <div class="training-wrapper" th:object="${diet}">
-        <div class="info">
+        <div class="training-info">
             <h5 th:text="*{title}">Title</h5>
             <p class="author" th:text="*{author}">Author</p>
             <p class="posted-on" th:text="*{created}">Created</p>
             <p th:text="*{description}">Description</p>
+        </div>
+
+        <div class="img-wrapper">
+            <img th:src="@{*{pictureUrl}}" alt="body goal">
         </div>
 
         <div class="buttons" th:if="${canModify}">

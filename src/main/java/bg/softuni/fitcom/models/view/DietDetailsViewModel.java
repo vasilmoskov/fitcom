@@ -10,6 +10,7 @@ public class DietDetailsViewModel {
     private String created;
     private String author;
     private PurposeEnum purpose;
+    private String pictureUrl;
 
     public String getTitle() {
         return title;
@@ -62,6 +63,15 @@ public class DietDetailsViewModel {
 
     public DietDetailsViewModel setPurpose(PurposeEnum purpose) {
         this.purpose = purpose;
+        return this;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public DietDetailsViewModel setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
         return this;
     }
 }

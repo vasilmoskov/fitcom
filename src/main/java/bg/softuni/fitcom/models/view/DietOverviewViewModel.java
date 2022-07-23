@@ -6,6 +6,7 @@ public class DietOverviewViewModel {
     private String description;
     private String author;
     private String created;
+    private String pictureUrl;
 
     public String getTitle() {
         return title;
@@ -49,6 +50,15 @@ public class DietOverviewViewModel {
 
     public DietOverviewViewModel setCreated(String created) {
         this.created = created;
+        return this;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public DietOverviewViewModel setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
         return this;
     }
 }
