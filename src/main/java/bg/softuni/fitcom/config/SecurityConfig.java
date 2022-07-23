@@ -2,7 +2,7 @@ package bg.softuni.fitcom.config;
 
 import bg.softuni.fitcom.models.user.AuthenticationSuccessHandlerImpl;
 import bg.softuni.fitcom.models.user.FacebookUserService;
-import bg.softuni.fitcom.models.user.OidcUserService;
+import bg.softuni.fitcom.models.user.FitcomOidcUserService;
 import bg.softuni.fitcom.repositories.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(this.authenticationSuccessHandler)
                 .userInfoEndpoint()
                 .userService(new FacebookUserService(userRepository))
-                .oidcUserService(new OidcUserService(userRepository))
+                .oidcUserService(new FitcomOidcUserService(userRepository))
                 .and()
             .and()
                 .logout()

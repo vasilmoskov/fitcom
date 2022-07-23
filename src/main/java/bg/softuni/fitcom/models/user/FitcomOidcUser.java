@@ -12,11 +12,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OidcUser extends DefaultOidcUser implements FitcomPrincipal {
+public class FitcomOidcUser extends DefaultOidcUser implements FitcomPrincipal {
 
     private final UserRepository userRepository;
 
-    public OidcUser(org.springframework.security.oauth2.core.oidc.user.OidcUser oidcUser, UserRepository userRepository) {
+    public FitcomOidcUser(org.springframework.security.oauth2.core.oidc.user.OidcUser oidcUser, UserRepository userRepository) {
         super(oidcUser.getAuthorities(), oidcUser.getIdToken(), oidcUser.getUserInfo());
         this.userRepository = userRepository;
     }
