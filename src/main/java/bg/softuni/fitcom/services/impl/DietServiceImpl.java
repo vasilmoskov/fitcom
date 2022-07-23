@@ -18,6 +18,9 @@ import bg.softuni.fitcom.repositories.PurposeRepository;
 import bg.softuni.fitcom.repositories.UserRepository;
 import bg.softuni.fitcom.services.DietService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -47,11 +50,10 @@ public class DietServiceImpl implements DietService {
     }
 
     @Override
-    public List<DietOverviewViewModel> getDiets() {
-        return this.dietRepository.findAll()
-                .stream()
-                .map(this::toOverview)
-                .toList();
+    public Page<DietOverviewViewModel> getDiets(Pageable pageable) {
+        return this.dietRepository
+                .findAll(pageable)
+                .map(this::toOverview);
     }
 
     @Override

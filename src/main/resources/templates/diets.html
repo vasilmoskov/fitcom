@@ -28,6 +28,31 @@
 
     </section>
 
+    <div class="pagination-wrapper" th:if="${diets.getTotalPages() > 1}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:if="${diets.hasPrevious()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/diets(page = ${diets.getNumber() - 1}, size=${diets.getSize()})}">Previous
+                    </a>
+                </li>
+
+                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                    <a class="page-link"
+                       th:classappend="${diets.getNumber() == pageNumber - 1} ? 'active-link' : ''"
+                       th:href="@{/diets(page = ${pageNumber} - 1, size=${diets.getSize()})}"
+                       th:text="${pageNumber}">1</a>
+                </li>
+
+                <li th:if="${diets.hasNext()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/diets(page = ${diets.getNumber() + 1}, size=${diets.getSize()})}">Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
     <div class="add-training">
         <a th:href="@{/diets/add}">Add diet</a>
     </div>

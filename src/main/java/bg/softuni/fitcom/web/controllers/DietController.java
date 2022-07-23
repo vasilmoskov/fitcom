@@ -5,8 +5,12 @@ import bg.softuni.fitcom.models.binding.DietBindingModel;
 import bg.softuni.fitcom.models.service.CommentAddServiceModel;
 import bg.softuni.fitcom.models.service.DietServiceModel;
 import bg.softuni.fitcom.models.view.DietDetailsViewModel;
+import bg.softuni.fitcom.models.view.DietOverviewViewModel;
 import bg.softuni.fitcom.services.DietService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/diets")
@@ -36,9 +42,10 @@ public class DietController {
     }
 
     @GetMapping
-//    @PreAuthorize(canAccess)
-    public String getDiets(Model model, Authentication auth) {
-        model.addAttribute("diets", this.dietService.getDiets());
+    public String getDiets(Model model, @PageableDefault(page = 0, size = 3) Pageable pageable) {
+        Page<DietOverviewViewModel> diets = this.dietService.getDiets(pageable);
+        addPageNumbers(model, diets.getTotalPages());
+        model.addAttribute("diets", diets);
         return "diets";
     }
 
@@ -161,5 +168,15 @@ public class DietController {
     public String removeFromFavourites(@PathVariable long id, Authentication principal) {
         this.dietService.removeFromFavourites(id, principal.getName());
         return "redirect:/diets/" + id;
+    }
+
+    private void addPageNumbers(Model model, int totalPages) {
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .toList();
+
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
     }
 }
