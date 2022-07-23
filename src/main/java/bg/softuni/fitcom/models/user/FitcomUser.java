@@ -72,18 +72,6 @@ public class FitcomUser implements UserDetails, FitcomPrincipal {
         return true;
     }
 
-//    public String getGreetingName() {
-//        if (getFirstName() != null && !getFirstName().isEmpty()) {
-//            return getFirstName();
-//        }
-//
-//        if (getLastName() != null && !getLastName().isEmpty()) {
-//            return "Mr. " + getLastName();
-//        }
-//
-//        return "Anonymous";
-//    }
-
     @Override
     public String getName() {
         return email;

@@ -1,8 +1,9 @@
 package bg.softuni.fitcom.config;
 
 import bg.softuni.fitcom.models.user.AuthenticationSuccessHandlerImpl;
-import bg.softuni.fitcom.models.user.FacebookUser;
-import bg.softuni.fitcom.models.user.FitcomOidcUserService;
+import bg.softuni.fitcom.models.user.FacebookUserService;
+import bg.softuni.fitcom.models.user.OidcUserService;
+import bg.softuni.fitcom.repositories.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,14 +22,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final AccessDeniedHandler accessDeniedHandler;
     private final AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
+    private final UserRepository userRepository;
 
     public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder,
                           AuthenticationSuccessHandlerImpl authenticationSuccessHandler,
-                          AccessDeniedHandler accessDeniedHandler) {
+                          AccessDeniedHandler accessDeniedHandler, UserRepository userRepository) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.accessDeniedHandler = accessDeniedHandler;
         this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -56,8 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .loginPage("/login")
                 .successHandler(this.authenticationSuccessHandler)
-                .userInfoEndpoint().customUserType(FacebookUser.class, "facebook")
-                .oidcUserService(new FitcomOidcUserService())
+                .userInfoEndpoint()
+                .userService(new FacebookUserService(userRepository))
+                .oidcUserService(new OidcUserService(userRepository))
                 .and()
             .and()
                 .logout()

@@ -6,6 +6,7 @@ import bg.softuni.fitcom.models.entities.UserEntity;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.service.ProfileEditServiceModel;
 import bg.softuni.fitcom.models.service.UserRegisterServiceModel;
+import bg.softuni.fitcom.models.user.FitComUserService;
 import bg.softuni.fitcom.models.view.ApplicationsViewModel;
 import bg.softuni.fitcom.models.view.DietOverviewViewModel;
 import bg.softuni.fitcom.models.view.ProfileViewModel;
@@ -33,12 +34,12 @@ public class UserServiceImpl implements UserService {
 
     private final TrainingProgramServiceImpl trainingProgramService;
     private final DietServiceImpl dietService;
-    private final FitComUserDetailsServiceImpl userDetailsService;
+    private final FitComUserService userDetailsService;
 
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, TrainingProgramRepository trainingProgramRepository, DietRepository dietRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, TrainingProgramServiceImpl trainingProgramService, DietServiceImpl dietService, FitComUserDetailsServiceImpl userDetailsService) {
+    public UserServiceImpl(UserRepository userRepository, TrainingProgramRepository trainingProgramRepository, DietRepository dietRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, TrainingProgramServiceImpl trainingProgramService, DietServiceImpl dietService, FitComUserService userDetailsService) {
         this.userRepository = userRepository;
         this.trainingProgramRepository = trainingProgramRepository;
         this.dietRepository = dietRepository;

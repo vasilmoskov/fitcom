@@ -55,7 +55,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                     .setPassword(username)
                     .setRoles(new ArrayList<>())
                     .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654441524/default_avatar_wmftdp.webp");
-            ;
 
             userService.register(registerModel);
         }

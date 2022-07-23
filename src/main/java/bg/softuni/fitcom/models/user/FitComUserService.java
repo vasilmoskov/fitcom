@@ -1,8 +1,7 @@
-package bg.softuni.fitcom.services.impl;
+package bg.softuni.fitcom.models.user;
 
 import bg.softuni.fitcom.exceptions.ResourceNotFoundException;
 import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,10 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FitComUserDetailsServiceImpl implements UserDetailsService {
+public class FitComUserService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    public FitComUserDetailsServiceImpl(UserRepository userRepository) {
+    public FitComUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
