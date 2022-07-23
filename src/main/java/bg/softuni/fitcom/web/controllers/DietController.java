@@ -105,7 +105,6 @@ public class DietController {
         return "redirect:/diets/" + id;
     }
 
-
     // Copied:
 
     @GetMapping("/{id}/edit")

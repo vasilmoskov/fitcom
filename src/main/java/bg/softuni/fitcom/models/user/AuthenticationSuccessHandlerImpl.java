@@ -44,8 +44,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
             response.sendRedirect(redirectUrl);
 
-//            UserEntity user = userService.getUser(principal.getEmail());
-
             if (userService.getUser(principal.getEmail()) != null) {
                 return;
             }
