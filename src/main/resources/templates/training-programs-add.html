@@ -61,6 +61,7 @@
 
             <div class="checkbox-wrapper">
                 <input type="checkbox" id="bodyParts" name="bodyParts"
+                       th:field="*{bodyParts}"
                        th:each="b : ${bodyParts}"
                        th:text="${b.name()}"
                        th:value="${b.name()}">
