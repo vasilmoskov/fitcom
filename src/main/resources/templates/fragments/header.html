@@ -29,8 +29,10 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                         <li><a class="dropdown-item" th:text="#{navbar_pending_comments}"
                                th:href="@{/comments/pending}">Pending Comments</a></li>
-                        <li><a class="dropdown-item" th:href="@{/pending/applications}">Pending Applications</a></li>
-                        <li><a class="dropdown-item" th:href="@{/stats}">Stats</a></li>
+                        <li><a class="dropdown-item" th:text="#{navbar_pending_applications}"
+                               th:href="@{/pending/applications}">Pending Applications</a></li>
+                        <li><a class="dropdown-item" th:text="#{navbar_stats}"
+                               th:href="@{/stats}">Stats</a></li>
                     </ul>
                 </div>
             </th:block>
@@ -56,17 +58,15 @@
 
             <li><a th:text="#{navbar_home}" th:href="@{/}">Home</a></li>
 
+            <li><a th:text="#{navbar_training_programs}" th:href="@{/training-programs}">Training programs</a></li>
+            <li><a th:text="#{navbar_diets}" th:href="@{/diets}">Diets</a></li>
+
             <th:block sec:authorize="${!isAuthenticated()}">
                 <li><a th:text="#{navbar_login}" th:href="@{/login}">Login</a></li>
                 <li><a th:text="#{navbar_register}" th:href="@{/register}">Register</a></li>
             </th:block>
 
-            <li><a th:text="#{navbar_training_programs}" th:href="@{/training-programs}">Training programs</a></li>
-            <li><a th:text="#{navbar_diets}" th:href="@{/diets}">Diets</a></li>
-
             <th:block sec:authorize="${isAuthenticated()}">
-                <!--                    <li><a th:href="@{/profile}">Profile</a></li>-->
-
                 <form id="logout-form" th:action="@{/logout}" th:method="post">
                     <input th:value="#{navbar_logout}" id="logout-btn" type="submit" value="Logout">
                 </form>
