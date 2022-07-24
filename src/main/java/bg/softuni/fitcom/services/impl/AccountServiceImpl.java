@@ -14,7 +14,6 @@ import bg.softuni.fitcom.repositories.UserRepository;
 import bg.softuni.fitcom.services.AccountService;
 import bg.softuni.fitcom.repositories.TokenRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,14 +24,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    private final TokenRepository verificationTokenRepository;
+    private final TokenRepository tokenRepository;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
 
-    public AccountServiceImpl(TokenRepository verificationTokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
-        this.verificationTokenRepository = verificationTokenRepository;
+    public AccountServiceImpl(TokenRepository tokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
+        this.tokenRepository = tokenRepository;
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -44,6 +43,36 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity accountEntity = toEntity(serviceModel);
         this.accountRepository.save(accountEntity);
         return serviceModel;
+    }
+
+    @Override
+    public void createVerificationToken(AccountRegisterServiceModel serviceModel, String token) {
+        TokenEntity verificationToken = new TokenEntity()
+                .setToken(token)
+                .setExpiryDate()
+                .setEmail(serviceModel.getEmail());
+
+        this.tokenRepository.save(verificationToken);
+    }
+
+    @Override
+    @Transactional
+    public void confirmAccount(String token) {
+        TokenEntity verificationToken = this.tokenRepository.findByToken(token).get();
+
+        if (verificationToken.getExpiryDate().before(new Date())) {
+            throw new TokenExpiredException();
+        }
+
+        AccountEntity accountEntity = this.accountRepository.findByEmail(verificationToken.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Account with email " +  verificationToken.getEmail() + " does not exist!"));
+
+        UserEntity userEntity = this.modelMapper.map(accountEntity, UserEntity.class);
+        userEntity.setId(0);
+        this.userRepository.save(userEntity);
+
+        this.accountRepository.delete(accountEntity);
+        this.tokenRepository.delete(verificationToken);
     }
 
     private AccountEntity toEntity(AccountRegisterServiceModel serviceModel) {
@@ -59,35 +88,5 @@ public class AccountServiceImpl implements AccountService {
 
         return this.modelMapper.map(serviceModel, AccountEntity.class)
                 .setRoles(roleEntities);
-    }
-
-    @Override
-    public void createVerificationToken(AccountRegisterServiceModel serviceModel, String token) {
-        TokenEntity verificationToken = new TokenEntity()
-                .setToken(token)
-                .setExpiryDate()
-                .setEmail(serviceModel.getEmail());
-
-        this.verificationTokenRepository.save(verificationToken);
-    }
-
-    @Override
-    @Transactional
-    public void confirmAccount(String token) {
-        TokenEntity verificationToken = this.verificationTokenRepository.findByToken(token).get();
-
-        if (verificationToken.getExpiryDate().before(new Date())) {
-            throw new TokenExpiredException();
-        }
-
-        AccountEntity accountEntity = this.accountRepository.findByEmail(verificationToken.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " +  verificationToken.getEmail() + " does not exist!"));
-
-        UserEntity userEntity = this.modelMapper.map(accountEntity, UserEntity.class);
-        userEntity.setId(0);
-        this.userRepository.save(userEntity);
-
-        this.accountRepository.delete(accountEntity);
-        this.verificationTokenRepository.delete(verificationToken);
     }
 }
