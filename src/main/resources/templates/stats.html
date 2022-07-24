@@ -13,9 +13,9 @@
 
     <div class="table-wrapper">
         <table class="table" th:if="${!trainingProgramsToViews.isEmpty()}">
-            <thead>
+            <thead class="thead-dark">
             <tr>
-                <th scope="col">Training Program</th>
+                <th scope="col">Training Program/ Diet</th>
                 <th scope="col">Author</th>
                 <th scope="col">Views</th>
             </tr>
@@ -27,10 +27,14 @@
                 <td th:text="${t.getValue()}"></td>
             </tr>
 
+            <tr th:each="d : ${dietsToViews.entrySet()}">
+                <td th:text="${d.getKey().title}"></td>
+                <td th:text="${d.getKey().author}"></td>
+                <td th:text="${d.getValue()}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
-
 </main>
 
 <footer th:replace="fragments/footer.html :: footer"></footer>

@@ -22,7 +22,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ExerciseDetailsViewModel getExercise(long id) {
         ExerciseEntity entity = this.exerciseRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such exercise"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercise with id: " + id + " does not exist!"));
 
         return this.modelMapper.map(entity, ExerciseDetailsViewModel.class);
     }

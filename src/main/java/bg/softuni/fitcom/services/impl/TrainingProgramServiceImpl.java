@@ -103,7 +103,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Transactional
     public TrainingProgramDetailsViewModel getTrainingProgram(long id) {
         TrainingProgramEntity entity = this.trainingProgramRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Training program does not exist!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         return toDetails(entity);
     }
@@ -112,10 +112,10 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Transactional
     public boolean canModify(String email, long trainingId) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository.findById(trainingId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + trainingId + " does not exist!"));
 
         return isAdmin(userEntity) || isOwner(userEntity, trainingProgram);
     }
@@ -124,10 +124,10 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Transactional
     public boolean isInUserFavourites(String email, long trainingId) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository.findById(trainingId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + trainingId + " does not exist!"));
 
         return userEntity.getFavouriteTrainingPrograms().contains(trainingProgram);
     }
@@ -158,11 +158,11 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Transactional
     public void addToFavourites(long id, String userEmail) {
         UserEntity userEntity = this.userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + userEmail + " does not exist!"));
 
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         userEntity.addFavouriteTrainingProgram(trainingProgram);
         this.userRepository.save(userEntity);
@@ -172,11 +172,11 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Transactional
     public void removeFromFavourites(long id, String userEmail) {
         UserEntity userEntity = this.userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + userEmail + " does not exist!"));
 
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         userEntity.getFavouriteTrainingPrograms().remove(trainingProgram);
         this.userRepository.save(userEntity);
@@ -185,11 +185,11 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Override
     public CommentAddServiceModel addComment(CommentAddServiceModel serviceModel, long id) {
         UserEntity author = userRepository.findByEmail(serviceModel.getAuthor())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + serviceModel.getAuthor() + " does not exist!"));
 
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         CommentEntity commentEntity = this.modelMapper.map(serviceModel, CommentEntity.class)
                 .setAuthor(author)
@@ -204,7 +204,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     public List<CommentViewModel> getComments(long id) {
         TrainingProgramEntity trainingProgram = this.trainingProgramRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         return this.commentRepository
                 .findAllByTrainingProgramAndApproved(trainingProgram, true)
@@ -246,7 +246,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
     @Override
     public void removeExerciseFromTraining(long id, String exerciseName) {
         TrainingProgramEntity trainingProgram = trainingProgramRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such training program."));
+                .orElseThrow(() -> new ResourceNotFoundException("Training program with id " + id + " does not exist!"));
 
         trainingProgram.getExercises().removeIf(e -> e.getName().equals(exerciseName));
         trainingProgramRepository.save(trainingProgram);
@@ -277,13 +277,13 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
 
     private GoalEntity getGoalEntity(TrainingProgramServiceModel serviceModel) {
         return this.goalRepository.findByName(serviceModel.getGoal())
-                .orElseThrow(() -> new ResourceNotFoundException("No such goal."));
+                .orElseThrow(() -> new ResourceNotFoundException(serviceModel.getGoal() + " is not a valid goal!"));
     }
 
     private UserEntity getAuthor(TrainingProgramServiceModel serviceModel) {
         return this.userRepository
                 .findByEmail(serviceModel.getAuthor())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + serviceModel.getAuthor() + " does not exist!"));
     }
 
     private List<BodyPartEntity> getBodyPartEntities(TrainingProgramServiceModel serviceModel) {
@@ -292,7 +292,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
                 .stream()
                 .map(bp -> this.bodyPartRepository
                         .findByName(bp)
-                        .orElseThrow(() -> new ResourceNotFoundException("No such bodypart.")))
+                        .orElseThrow(() -> new ResourceNotFoundException(bp + " is not a valid body part!")))
                 .toList()
                 : List.of(this.bodyPartRepository.findByName(BodyPartEnum.OTHER).get());
     }

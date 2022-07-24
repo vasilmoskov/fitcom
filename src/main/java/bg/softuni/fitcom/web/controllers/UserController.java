@@ -1,15 +1,20 @@
 package bg.softuni.fitcom.web.controllers;
 
+import bg.softuni.fitcom.exceptions.ResourceNotFoundException;
 import bg.softuni.fitcom.models.binding.ProfileEditBindingModel;
 import bg.softuni.fitcom.models.service.CloudinaryImageServiceModel;
 import bg.softuni.fitcom.models.service.ProfileEditServiceModel;
+import bg.softuni.fitcom.models.view.DietDetailsViewModel;
 import bg.softuni.fitcom.models.view.ProfileViewModel;
 import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
 import bg.softuni.fitcom.services.CloudinaryService;
+import bg.softuni.fitcom.services.DietService;
 import bg.softuni.fitcom.services.TrainingProgramService;
 import bg.softuni.fitcom.services.UserService;
 import bg.softuni.fitcom.web.interceptors.ViewsInterceptor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,20 +34,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-//@RequestMapping("/users")
 public class UserController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
     private final TrainingProgramService trainingProgramService;
+    private final DietService dietService;
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
     private final ViewsInterceptor viewsInterceptor;
 
     public UserController(UserService userService, TrainingProgramService trainingProgramService,
-                          CloudinaryService cloudinaryService, ModelMapper modelMapper,
+                          DietService dietService, CloudinaryService cloudinaryService, ModelMapper modelMapper,
                           ViewsInterceptor viewsInterceptor) {
         this.userService = userService;
         this.trainingProgramService = trainingProgramService;
+        this.dietService = dietService;
         this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
         this.viewsInterceptor = viewsInterceptor;
@@ -151,17 +159,41 @@ public class UserController {
     @GetMapping("/stats")
     public String visitedUrls(Model model, Authentication principal) {
         Map<Long, Integer> trainingProgramIdsToViews = viewsInterceptor.getTrainingProgramIdsToViews();
-
         Map<TrainingProgramDetailsViewModel, Integer> trainingProgramsToViews = new HashMap<>();
-
-        for (var entry : trainingProgramIdsToViews.entrySet()) {
-            long id = entry.getKey();
-            TrainingProgramDetailsViewModel trainingProgram = trainingProgramService.getTrainingProgram(id);
-            trainingProgramsToViews.put(trainingProgram, entry.getValue());
-        }
-
+        putValidTrainingPrograms(trainingProgramIdsToViews, trainingProgramsToViews);
         model.addAttribute("trainingProgramsToViews", trainingProgramsToViews);
 
+        Map<Long, Integer> dietIdsToViews = viewsInterceptor.getDietIdsToViews();
+        Map<DietDetailsViewModel, Integer> dietsToViews = new HashMap<>();
+        putValidDiets(dietIdsToViews, dietsToViews);
+        model.addAttribute("dietsToViews", dietsToViews);
+
         return "stats";
+    }
+
+    private void putValidDiets(Map<Long, Integer> dietIdsToViews, Map<DietDetailsViewModel, Integer> dietsToViews) {
+        for (var entry : dietIdsToViews.entrySet()) {
+            long id = entry.getKey();
+
+            try {
+                DietDetailsViewModel diet = dietService.getDiet(id);
+                dietsToViews.put(diet, entry.getValue());
+            } catch (ResourceNotFoundException e) {
+                LOGGER.info(e.getMessage());
+            }
+        }
+    }
+
+    private void putValidTrainingPrograms(Map<Long, Integer> trainingProgramIdsToViews, Map<TrainingProgramDetailsViewModel, Integer> trainingProgramsToViews) {
+        for (var entry : trainingProgramIdsToViews.entrySet()) {
+            long id = entry.getKey();
+
+            try {
+                TrainingProgramDetailsViewModel trainingProgram = trainingProgramService.getTrainingProgram(id);
+                trainingProgramsToViews.put(trainingProgram, entry.getValue());
+            } catch (ResourceNotFoundException e) {
+                LOGGER.info(e.getMessage());
+            }
+        }
     }
 }

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getFirstName(String email) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         String firstName = userEntity.getFirstName();
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
                 getRoles()
                 .stream()
                 .map(r -> this.roleRepository.findByRole(r)
-                        .orElseThrow(() -> new ResourceNotFoundException("No such role!")))
+                        .orElseThrow(() -> new ResourceNotFoundException(r + " is not a valid role!")))
                 .collect(Collectors.toList());
 
         roleEntities.add(this.roleRepository.findByRole(RoleEnum.USER).get());
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ProfileViewModel getProfile(String email) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         List<RoleEnum> roles = userEntity
                 .getRoles()
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<TrainingProgramsOverviewViewModel> getFavouriteTrainingPrograms(String email) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         return userEntity.getFavouriteTrainingPrograms()
                 .stream()
@@ -118,19 +118,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileEditServiceModel editProfile(ProfileEditServiceModel serviceModel) {
         UserEntity userEntity = this.userRepository.findByEmail(serviceModel.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
-
-//        List<RoleEntity> roles = serviceModel.getRoles()
-//                .stream()
-//                .map(r -> this.roleRepository.findByRole(r)
-//                        .orElseThrow(() -> new ResourceNotFoundException("No such role")))
-//                .collect(Collectors.toList());
-//        roles.add(this.roleRepository.findByRole(RoleEnum.USER).get());
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + serviceModel.getEmail() + " does not exist!"));
 
         userEntity.setFirstName(serviceModel.getFirstName())
                 .setLastName(serviceModel.getLastName())
                 .setAge(serviceModel.getAge());
-//                .setRoles(roles);
 
         if (serviceModel.getPicturePublicId() != null && serviceModel.getPictureUrl() != null) {
             userEntity.setPictureUrl(serviceModel.getPictureUrl())
@@ -156,7 +148,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<DietOverviewViewModel> getFavouriteDiets(String email) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         return userEntity.getFavouriteDiets()
                 .stream()
@@ -178,7 +170,7 @@ public class UserServiceImpl implements UserService {
     public boolean isAdmin(String email) {
         return this.userRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."))
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"))
                 .getRoles()
                 .stream()
                 .map(RoleEntity::getRole)
@@ -189,10 +181,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public boolean hasApplied(String email, RoleEnum role) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         RoleEntity roleEntity = this.roleRepository.findByRole(role)
-                .orElseThrow(() -> new ResourceNotFoundException("No such role."));
+                .orElseThrow(() -> new ResourceNotFoundException(role + " is not a valid role!"));
 
         return userEntity.getPendingRoles().contains(roleEntity) || userEntity.getRoles().contains(roleEntity);
     }
@@ -205,7 +197,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity userEntity = this.userRepository.findByEmail(name)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + name + " does not exist!"));
         RoleEntity nutritionistRole = this.roleRepository.findByRole(RoleEnum.NUTRITIONIST).get();
         userEntity.addPendingRole(nutritionistRole);
         this.userRepository.save(userEntity);
@@ -219,7 +211,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity userEntity = this.userRepository.findByEmail(name)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + name + " does not exist!"));
 
         RoleEntity trainerRole = this.roleRepository.findByRole(RoleEnum.TRAINER).get();
 
@@ -241,7 +233,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void approveApplication(long userId) {
         UserEntity userEntity = this.userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " does not exist!"));
 
         userEntity.getPendingRoles()
                 .forEach(userEntity::addRole);
@@ -253,7 +245,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteApplication(long userId) {
         UserEntity userEntity = this.userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " does not exist!"));
 
         userEntity.setPendingRoles(new ArrayList<>());
         this.userRepository.save(userEntity);

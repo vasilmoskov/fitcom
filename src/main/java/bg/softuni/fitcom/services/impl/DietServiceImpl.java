@@ -58,10 +58,10 @@ public class DietServiceImpl implements DietService {
     @Override
     public DietServiceModel updateDiet(DietServiceModel serviceModel) {
         UserEntity userEntity = this.userRepository.findByEmail(serviceModel.getAuthor())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + serviceModel.getAuthor() + " does not exist!"));
 
         GoalEntity goalEntity = this.goalRepository.findByName(serviceModel.getGoal())
-                .orElseThrow(() -> new ResourceNotFoundException("No such goal!"));
+                .orElseThrow(() -> new ResourceNotFoundException(serviceModel.getGoal() + " is not a valid goal!"));
 
         DietEntity dietEntity = this.dietRepository
                 .findById(serviceModel.getId())
@@ -82,7 +82,7 @@ public class DietServiceImpl implements DietService {
     @Override
     public DietDetailsViewModel getDiet(long id) {
         DietEntity dietEntity = this.dietRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet"));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + id + " does not exist!"));
 
         return toDetails(dietEntity);
     }
@@ -91,10 +91,10 @@ public class DietServiceImpl implements DietService {
     @Transactional
     public boolean canModify(String email, long dietId) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         DietEntity diet = this.dietRepository.findById(dietId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + dietId + " does not exist!"));
 
         return isAdmin(userEntity) || isOwner(userEntity, diet);
     }
@@ -103,10 +103,10 @@ public class DietServiceImpl implements DietService {
     @Transactional
     public boolean isInUserFavourites(String email, long dietId) {
         UserEntity userEntity = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " does not exist!"));
 
         DietEntity diet = this.dietRepository.findById(dietId)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + dietId + " does not exist!"));
 
         return userEntity.getFavouriteDiets().contains(diet);
     }
@@ -120,11 +120,11 @@ public class DietServiceImpl implements DietService {
     @Transactional
     public void addToFavourites(long id, String userEmail) {
         UserEntity userEntity = this.userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + userEmail + " does not exist!"));
 
         DietEntity diet = this.dietRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + id + " does not exist!"));
 
         userEntity.addFavouriteDiet(diet);
         this.userRepository.save(userEntity);
@@ -134,11 +134,11 @@ public class DietServiceImpl implements DietService {
     @Transactional
     public void removeFromFavourites(long id, String userEmail) {
         UserEntity userEntity = this.userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + userEmail + " does not exist!"));
 
         DietEntity diet = this.dietRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + id + " does not exist!"));
 
         userEntity.getFavouriteDiets().remove(diet);
         this.userRepository.save(userEntity);
@@ -147,11 +147,11 @@ public class DietServiceImpl implements DietService {
     @Override
     public CommentAddServiceModel addComment(CommentAddServiceModel serviceModel, long id) {
         UserEntity author = userRepository.findByEmail(serviceModel.getAuthor())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + serviceModel.getAuthor() + " does not exist!"));
 
         DietEntity diet = this.dietRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + id + " does not exist!"));
 
         CommentEntity commentEntity = this.modelMapper.map(serviceModel, CommentEntity.class)
                 .setAuthor(author)
@@ -166,7 +166,7 @@ public class DietServiceImpl implements DietService {
     public List<CommentViewModel> getComments(long id) {
         DietEntity diet = this.dietRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such diet."));
+                .orElseThrow(() -> new ResourceNotFoundException("Diet with id: " + id + " does not exist!"));
 
         return this.commentRepository
                 .findAllByDietAndApproved(diet, true)

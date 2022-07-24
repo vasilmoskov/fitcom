@@ -46,7 +46,7 @@ public class FitcomOidcUser extends DefaultOidcUser implements FitcomPrincipal {
 
         UserEntity userEntity = userRepository
                 .findByEmail(getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("No such user!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + getEmail() + " does not exist!"));
 
         List<RoleEntity> roles = userEntity.getRoles();
 

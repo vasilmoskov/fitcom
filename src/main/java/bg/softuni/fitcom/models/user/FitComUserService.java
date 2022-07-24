@@ -26,7 +26,7 @@ public class FitComUserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = this.userRepository.findByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("No such user."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + username + " does not exist!"));
 
         return mapToUserDetails(userEntity);
     }

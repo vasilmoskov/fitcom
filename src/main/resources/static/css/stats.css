@@ -6,3 +6,8 @@
 .table {
     width: 50%;
 }
+
+.thead-dark {
+    background-color: #344250;
+    color: white;
+}

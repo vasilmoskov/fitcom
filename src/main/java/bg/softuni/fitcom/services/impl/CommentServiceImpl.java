@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void approve(long id) {
         CommentEntity comment = this.commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such comment."));
+                .orElseThrow(() -> new ResourceNotFoundException("Comment with id: " + id + " does not exist!"));
 
         comment.setApproved(true);
         this.commentRepository.save(comment);
@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void delete(long id) {
         CommentEntity comment = this.commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such comment."));
+                .orElseThrow(() -> new ResourceNotFoundException("Comment with id: " + id + " does not exist!"));
 
         this.commentRepository.deleteById(id);
     }

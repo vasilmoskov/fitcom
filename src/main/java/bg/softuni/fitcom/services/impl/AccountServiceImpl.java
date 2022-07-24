@@ -30,15 +30,13 @@ public class AccountServiceImpl implements AccountService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(TokenRepository verificationTokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(TokenRepository verificationTokenRepository, AccountRepository accountRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
         this.verificationTokenRepository = verificationTokenRepository;
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
                 : serviceModel.getRoles()
                 .stream()
                 .map(r -> this.roleRepository.findByRole(r)
-                        .orElseThrow(() -> new ResourceNotFoundException("No such role!")))
+                        .orElseThrow(() -> new ResourceNotFoundException(r + " is not a valid role!")))
                 .collect(Collectors.toList());
 
         roleEntities.add(this.roleRepository.findByRole(RoleEnum.USER).get());
@@ -83,7 +81,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         AccountEntity accountEntity = this.accountRepository.findByEmail(verificationToken.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("No such account!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Account with email " +  verificationToken.getEmail() + " does not exist!"));
 
         UserEntity userEntity = this.modelMapper.map(accountEntity, UserEntity.class);
         userEntity.setId(0);

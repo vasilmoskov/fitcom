@@ -21,7 +21,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenServiceModel getToken(String token) {
         TokenEntity resetTokenEntity = this.tokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResourceNotFoundException("No such token!"));
+                .orElseThrow(() -> new ResourceNotFoundException(token + " is not a valid token!"));
 
         return modelMapper.map(resetTokenEntity, TokenServiceModel.class);
     }
