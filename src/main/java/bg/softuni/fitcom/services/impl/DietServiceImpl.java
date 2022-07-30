@@ -155,8 +155,7 @@ public class DietServiceImpl implements DietService {
 
         CommentEntity commentEntity = this.modelMapper.map(serviceModel, CommentEntity.class)
                 .setAuthor(author)
-                .setDiet(diet)
-                .setApproved(false);
+                .setDiet(diet);
 
         this.commentRepository.save(commentEntity);
         return serviceModel;

@@ -1,12 +1,10 @@
 package bg.softuni.fitcom.models.service;
 
-import bg.softuni.fitcom.models.entities.UserEntity;
-
 import java.time.LocalDateTime;
 
 public class CommentAddServiceModel {
     private LocalDateTime created;
-    private Boolean approved; // TODO: pending comments for admins - don't show until approved
+    private Boolean approved;
     private String textContent;
     private String author;
 

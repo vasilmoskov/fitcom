@@ -106,7 +106,8 @@ public class DietController {
         CommentAddServiceModel serviceModel = new CommentAddServiceModel()
                 .setTextContent(bingingModel.getTextContent())
                 .setAuthor(auth.getName())
-                .setCreated(LocalDateTime.now());
+                .setCreated(LocalDateTime.now())
+                .setApproved(false);
 
         this.dietService.addComment(serviceModel, id);
         return "redirect:/diets/" + id;
