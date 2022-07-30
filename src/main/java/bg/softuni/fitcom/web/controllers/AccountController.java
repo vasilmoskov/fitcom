@@ -78,7 +78,7 @@ public class AccountController {
                 .map(bindingModel, AccountRegisterServiceModel.class)
                 .setPassword(passwordEncoder.encode(bindingModel.getPassword()));
 
-        if (!bindingModel.getAvatar().isEmpty()) {
+        if (bindingModel.getAvatar() != null && !bindingModel.getAvatar().isEmpty()) {
             CloudinaryImageServiceModel upload = cloudinaryService.upload(bindingModel.getAvatar());
 
             serviceModel.setPictureUrl(upload.getUrl())

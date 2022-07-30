@@ -5,3 +5,31 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: testdevstuff1@gmail.com
+    password: ${gmail_password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 279770444333539
+            client-secret: 2accbb54c658aa39ad6b733d74dca585
+          google:
+            client-id: 694014954959-imulcqbmin4a8sfua2g5ub491adqd6e4.apps.googleusercontent.com
+            client-secret: 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
+
+cloudinary:
+  api-key: 128558148968146
+  api-secret: ${cloudinary_secret}
+  cloud-name: dilbpiicv
