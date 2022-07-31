@@ -6,7 +6,6 @@ import bg.softuni.fitcom.repositories.AccountRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
 import bg.softuni.fitcom.util.OnCreateAccountEvent;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.sql.SQLException;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -47,12 +44,6 @@ public class AccountControllerTest {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-//    @BeforeAll
-//    static void initTest() throws SQLException {
-//        Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082")
-//                .start();
-//    }
-
     @BeforeEach
     void setup() {
         RoleEntity user = new RoleEntity().setRole(RoleEnum.USER);
@@ -77,7 +68,8 @@ public class AccountControllerTest {
     @WithMockUser
     void testGetRegisterPageShouldRedirectToHomePageWhenLoggedInUserTriesToAccessIt() throws Exception {
         mockMvc.perform(get("/register"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
     }
 
     @Test

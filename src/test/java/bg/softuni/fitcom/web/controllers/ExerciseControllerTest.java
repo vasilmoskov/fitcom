@@ -3,7 +3,6 @@ package bg.softuni.fitcom.web.controllers;
 import bg.softuni.fitcom.models.entities.ExerciseEntity;
 import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.repositories.ExerciseRepository;
-import org.h2.tools.Server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
