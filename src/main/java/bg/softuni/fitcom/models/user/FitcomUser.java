@@ -1,6 +1,5 @@
 package bg.softuni.fitcom.models.user;
 
-//import bg.softuni.fitcom.models.user.FitcomPrincipal;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
