@@ -80,7 +80,7 @@ public class PasswordController {
         } else {
             password.setPassword(passwordEncoder.encode(password.getPassword()));
             this.passwordService.update(password.getPassword(), tokenServiceModel.getEmail());
-            return "login";
+            return "redirect:/login";
         }
     }
 }
