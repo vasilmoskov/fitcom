@@ -27,7 +27,7 @@ public class ExerciseControllerTest {
             "georgi@abv.bg",
             "Georgi",
             "Georgiev",
-            List.of(new SimpleGrantedAuthority("ADMIN"))
+            List.of(new SimpleGrantedAuthority("USER"))
     );
 
     @Autowired

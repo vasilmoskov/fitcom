@@ -95,7 +95,7 @@ public class UserController {
         ProfileEditServiceModel serviceModel = this.modelMapper.map(bindingModel, ProfileEditServiceModel.class)
                 .setEmail(auth.getName());
 
-        if (!bindingModel.getAvatar().isEmpty()) {
+        if (bindingModel.getAvatar() != null && !bindingModel.getAvatar().isEmpty()) {
             CloudinaryImageServiceModel upload = cloudinaryService.upload(bindingModel.getAvatar());
 
             serviceModel
