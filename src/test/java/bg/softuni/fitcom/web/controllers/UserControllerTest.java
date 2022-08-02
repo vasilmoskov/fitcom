@@ -1,11 +1,8 @@
 package bg.softuni.fitcom.web.controllers;
 
-import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.user.FitcomUser;
-import bg.softuni.fitcom.repositories.RoleRepository;
-import bg.softuni.fitcom.repositories.UserRepository;
+import bg.softuni.fitcom.utils.TestDataUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -34,56 +30,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    private final FitcomUser user = new FitcomUser(
-            "test",
-            "georgi@abv.bg",
-            "Georgi",
-            "Georgiev",
-            List.of(new SimpleGrantedAuthority("USER"))
-    );
-
-    private final FitcomUser admin = new FitcomUser(
-            "test",
-            "admin@abv.bg",
-            "Admin",
-            "Admin",
-            List.of(new SimpleGrantedAuthority("ADMIN"))
-    );
-
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private TestDataUtils testDataUtils;
 
     @BeforeEach
     void init() {
-        insertRoles();
-        createUser();
+        testDataUtils.initRoles();
+        testDataUtils.createUser();
     }
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
+        testDataUtils.cleanUpDatabase();
     }
 
     @Test
     void testGetProfile() throws Exception {
-        mockMvc.perform(get("/profile").with(user(user)))
+        mockMvc.perform(get("/profile").with(user(testDataUtils.getUser())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("profile"));
     }
 
     @Test
     void testGetEditProfile() throws Exception {
-        mockMvc.perform(get("/profile/edit").with(user(user)))
+        mockMvc.perform(get("/profile/edit").with(user(testDataUtils.getUser())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("profile-edit"));
     }
@@ -91,7 +64,7 @@ public class UserControllerTest {
     @Test
     void testEditProfile() throws Exception {
         mockMvc.perform(put("/profile/edit")
-                        .with(user(user))
+                        .with(user(testDataUtils.getUser()))
                         .with(csrf())
                         .param("firstName", "Gosho")
                         .param("lastName", "Geshev")
@@ -104,7 +77,7 @@ public class UserControllerTest {
     @Test
     void testEditProfileWithInvalidData() throws Exception {
         mockMvc.perform(put("/profile/edit")
-                        .with(user(user))
+                        .with(user(testDataUtils.getUser()))
                         .with(csrf())
                         .param("firstName", "G8")
                         .param("lastName", "G7")
@@ -117,7 +90,7 @@ public class UserControllerTest {
 
     @Test
     void testGetFavourites() throws Exception {
-        mockMvc.perform(get("/favourites").with(user(user)))
+        mockMvc.perform(get("/favourites").with(user(testDataUtils.getUser())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("favourites"))
                 .andExpect(model().attributeExists("diets", "trainingPrograms"));
@@ -125,7 +98,7 @@ public class UserControllerTest {
 
     @Test
     void testGetPosts() throws Exception {
-        mockMvc.perform(get("/posts").with(user(user)))
+        mockMvc.perform(get("/posts").with(user(testDataUtils.getUser())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("posts"))
                 .andExpect(model().attributeExists("diets", "trainingPrograms"));
@@ -134,7 +107,7 @@ public class UserControllerTest {
     @Test
     void testApplyForNutritionist() throws Exception {
         mockMvc.perform(post("/apply/nutritionist")
-                        .with(user(user))
+                        .with(user(testDataUtils.getUser()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
@@ -143,7 +116,7 @@ public class UserControllerTest {
     @Test
     void testApplyForTrainer() throws Exception {
         mockMvc.perform(post("/apply/trainer")
-                        .with(user(user))
+                        .with(user(testDataUtils.getUser()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
@@ -152,17 +125,17 @@ public class UserControllerTest {
     @Test
     void testGetPendingApplications_returnsForbiddenWhenUserIsNotAdmin() throws Exception {
         mockMvc.perform(get("/pending/applications")
-                        .with(user(user)))
+                        .with(user(testDataUtils.getUser())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/forbidden"));
     }
 
     @Test
     void testGetPendingApplications() throws Exception {
-        createAdmin();
+        testDataUtils.createAdmin();
 
         mockMvc.perform(get("/pending/applications")
-                        .with(user(admin)))
+                        .with(user(testDataUtils.getAdmin())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("applications"))
                 .andExpect(model().attributeExists("applications"));
@@ -170,56 +143,56 @@ public class UserControllerTest {
 
     @Test
     void testApprove() throws Exception {
-        createAdmin();
-        UserEntity applicant = getApplicant();
+        testDataUtils.createAdmin();
+        UserEntity applicant = testDataUtils.createApplicant();
 
         mockMvc.perform(post("/pending/applications/" + applicant.getId())
                         .with(csrf())
-                        .with(user(admin)))
+                        .with(user(testDataUtils.getAdmin())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pending/applications"));
     }
 
     @Test
     void testApprove_returnsForbiddenWhenAccessedByUser() throws Exception {
-        UserEntity applicant = getApplicant();
+        UserEntity applicant = testDataUtils.createApplicant();
 
         mockMvc.perform(post("/pending/applications/" + applicant.getId())
                         .with(csrf())
-                        .with(user(user)))
+                        .with(user(testDataUtils.getUser())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/forbidden"));
     }
 
     @Test
     void testDelete() throws Exception {
-        createAdmin();
-        UserEntity applicant = getApplicant();
+        testDataUtils.createAdmin();
+        UserEntity applicant = testDataUtils.createApplicant();
 
         mockMvc.perform(delete("/pending/applications/" + applicant.getId())
                         .with(csrf())
-                        .with(user(admin)))
+                        .with(user(testDataUtils.getAdmin())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pending/applications"));
     }
 
     @Test
     void testDelete_returnsForbiddenWhenAccessedByUser() throws Exception {
-        UserEntity applicant = getApplicant();
+        UserEntity applicant = testDataUtils.createApplicant();
 
         mockMvc.perform(delete("/pending/applications/" + applicant.getId())
                         .with(csrf())
-                        .with(user(user)))
+                        .with(user(testDataUtils.getUser())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/forbidden"));
     }
 
     @Test
     void testGetStats() throws Exception {
-        createAdmin();
+        testDataUtils.createAdmin();
 
         mockMvc.perform(get("/stats")
-                .with(user(admin)))
+                .with(user(testDataUtils.getAdmin())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("stats"))
                 .andExpect(model().attributeExists("trainingProgramsToViews", "dietsToViews"));
@@ -228,51 +201,8 @@ public class UserControllerTest {
     @Test
     void testGetStats_returnsForbiddenWhenAccessedByUser() throws Exception {
         mockMvc.perform(get("/stats")
-                        .with(user(user)))
+                        .with(user(testDataUtils.getUser())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/forbidden"));
-    }
-
-    private UserEntity getApplicant() {
-        UserEntity userEntity = userRepository.findByEmail("georgi@abv.bg").get();
-        userEntity.setPendingRoles(List.of(roleRepository.findByRole(RoleEnum.ADMIN).get()));
-        return userRepository.save(userEntity);
-    }
-
-    private void insertRoles() {
-        RoleEntity user = new RoleEntity()
-                .setRole(RoleEnum.USER);
-
-        RoleEntity trainer = new RoleEntity()
-                .setRole(RoleEnum.TRAINER);
-
-        RoleEntity nutritionist = new RoleEntity()
-                .setRole(RoleEnum.NUTRITIONIST);
-
-        RoleEntity admin = new RoleEntity()
-                .setRole(RoleEnum.ADMIN);
-
-        roleRepository.saveAll(List.of(user, trainer, nutritionist, admin));
-    }
-
-    private void createUser() {
-        UserEntity user = new UserEntity()
-                .setFirstName("Georgi")
-                .setLastName("Georgiev")
-                .setEmail("georgi@abv.bg")
-                .setPassword(passwordEncoder.encode("test"));
-
-        userRepository.save(user);
-    }
-
-    private void createAdmin() {
-        UserEntity user = new UserEntity()
-                .setFirstName("Admin")
-                .setLastName("Admin")
-                .setEmail("admin@abv.bg")
-                .setPassword(passwordEncoder.encode("test"))
-                .setRoles(List.of(roleRepository.findByRole(RoleEnum.ADMIN).get()));
-
-        userRepository.save(user);
     }
 }

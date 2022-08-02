@@ -1,13 +1,7 @@
 package bg.softuni.fitcom.web.controllers;
 
-import bg.softuni.fitcom.models.entities.AccountEntity;
-import bg.softuni.fitcom.models.entities.RoleEntity;
-import bg.softuni.fitcom.models.entities.TokenEntity;
-import bg.softuni.fitcom.models.enums.RoleEnum;
-import bg.softuni.fitcom.repositories.AccountRepository;
-import bg.softuni.fitcom.repositories.RoleRepository;
-import bg.softuni.fitcom.repositories.TokenRepository;
 import bg.softuni.fitcom.util.OnCreateAccountEvent;
+import bg.softuni.fitcom.utils.TestDataUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,29 +36,10 @@ public class AccountControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
+    private TestDataUtils testDataUtils;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-
-    @BeforeEach
-    void setup() {
-        RoleEntity user = new RoleEntity().setRole(RoleEnum.USER);
-        roleRepository.save(user);
-    }
-
-    @AfterEach()
-    void tearDown() {
-        tokenRepository.deleteAll();
-        accountRepository.deleteAll();
-        roleRepository.deleteAll();
-    }
 
     @TestConfiguration
     static class MockitoPublisherConfiguration {
@@ -73,6 +48,16 @@ public class AccountControllerTest {
         ApplicationEventPublisher publisher() {
             return mock(ApplicationEventPublisher.class);
         }
+    }
+
+    @BeforeEach
+    void setup() {
+        testDataUtils.initRoles();
+    }
+
+    @AfterEach()
+    void tearDown() {
+        testDataUtils.cleanUpDatabase();
     }
 
     @Test
@@ -125,32 +110,14 @@ public class AccountControllerTest {
 
     @Test
     void testConfirmAccount() throws Exception {
-        createAccount();
         String token = UUID.randomUUID().toString();
-        createToken(token);
+
+        testDataUtils.createAccount();
+        testDataUtils.createToken(token);
 
         mockMvc.perform(get("/register/confirm")
                         .queryParam("token", token))
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration-confirmed"));
-    }
-
-    private void createToken(String token) {
-        TokenEntity tokenEntity = new TokenEntity()
-                .setToken(token)
-                .setEmail("georgi@abv.bg")
-                .setExpiryDate();
-
-        tokenRepository.save(tokenEntity);
-    }
-
-    private void createAccount() {
-        AccountEntity account = new AccountEntity()
-                .setFirstName("Georgi")
-                .setLastName("Georgiev")
-                .setEmail("georgi@abv.bg")
-                .setPassword("test");
-
-        accountRepository.save(account);
     }
 }

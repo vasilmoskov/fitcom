@@ -3,6 +3,8 @@ package bg.softuni.fitcom.web.controllers;
 import bg.softuni.fitcom.models.entities.TokenEntity;
 import bg.softuni.fitcom.repositories.TokenRepository;
 import bg.softuni.fitcom.util.OnPasswordResetEvent;
+import bg.softuni.fitcom.utils.TestDataUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,7 +35,7 @@ public class PasswordControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TokenRepository tokenRepository;
+    private TestDataUtils testDataUtils;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -45,6 +47,11 @@ public class PasswordControllerTest {
         ApplicationEventPublisher publisher() {
             return mock(ApplicationEventPublisher.class);
         }
+    }
+
+    @AfterEach
+    void tearDown() {
+        testDataUtils.cleanUpDatabase();
     }
 
     @Test
@@ -79,7 +86,7 @@ public class PasswordControllerTest {
     @Test
     void testSaveNewPassword() throws Exception {
         String token = UUID.randomUUID().toString();
-        createToken(token);
+        testDataUtils.createToken(token);
 
         mockMvc.perform(post("/password-reset")
                         .param("password", "new")
@@ -93,7 +100,7 @@ public class PasswordControllerTest {
     @Test
     void testSaveNewPassword_PasswordsDontMatch() throws Exception {
         String token = UUID.randomUUID().toString();
-        createToken(token);
+        testDataUtils.createToken(token);
 
         mockMvc.perform(post("/password-reset")
                         .param("password", "new")
@@ -102,14 +109,5 @@ public class PasswordControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("passwordModel"));
-    }
-
-    private void createToken(String token) {
-        TokenEntity tokenEntity = new TokenEntity()
-                .setToken(token)
-                .setEmail("georgi@abv.bg")
-                .setExpiryDate();
-
-        tokenRepository.save(tokenEntity);
     }
 }

@@ -1,13 +1,11 @@
 package bg.softuni.fitcom.web.controllers;
 
-import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.repositories.UserRepository;
+import bg.softuni.fitcom.utils.TestDataUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,14 +25,11 @@ public class LoginControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserRepository userRepository;
+    private TestDataUtils testDataUtils;
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
+        testDataUtils.cleanUpDatabase();
     }
 
     @Test
@@ -54,7 +49,7 @@ public class LoginControllerTest {
 
     @Test
     void testLogin_succeeds() throws Exception {
-        createUser();
+        testDataUtils.createUser();
 
         mockMvc.perform(post("/login")
                         .param("email", "georgi@abv.bg")
@@ -66,7 +61,7 @@ public class LoginControllerTest {
 
     @Test
     void testLogin_fails() throws Exception {
-        createUser();
+        testDataUtils.createUser();
 
         mockMvc.perform(post("/login")
                         .param("email", "georgi@abv.bg")
@@ -74,15 +69,4 @@ public class LoginControllerTest {
                         .with(csrf()))
                 .andExpect(forwardedUrl("/login-error"));
     }
-
-    private void createUser() {
-        UserEntity user = new UserEntity()
-                .setFirstName("Georgi")
-                .setLastName("Georgiev")
-                .setEmail("georgi@abv.bg")
-                .setPassword(passwordEncoder.encode("test"));
-
-        userRepository.save(user);
-    }
-
 }
