@@ -28,13 +28,15 @@ public class CommentController {
     }
 
     @PostMapping("/pending/{id}")
-    public String approve(@PathVariable long id) {
+    @PreAuthorize("@userServiceImpl.isAdmin(#principal.name)")
+    public String approve(@PathVariable long id, Authentication principal) {
         this.commentService.approve(id);
         return "redirect:/comments/pending";
     }
 
     @DeleteMapping("/pending/{id}")
-    public String delete(@PathVariable long id) {
+    @PreAuthorize("@userServiceImpl.isAdmin(#principal.name)")
+    public String delete(@PathVariable long id, Authentication principal) {
         this.commentService.delete(id);
         return "redirect:/comments/pending";
     }

@@ -1,16 +1,12 @@
 package bg.softuni.fitcom.web.controllers;
 
-import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.utils.TestDataUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,7 +22,6 @@ public class ExerciseControllerTest {
 
     @Autowired
     private TestDataUtils testDataUtils;
-
 
     @AfterEach
     void tearDown() {

@@ -1,6 +1,7 @@
 package bg.softuni.fitcom.utils;
 
 import bg.softuni.fitcom.models.entities.AccountEntity;
+import bg.softuni.fitcom.models.entities.CommentEntity;
 import bg.softuni.fitcom.models.entities.ExerciseEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
 import bg.softuni.fitcom.models.entities.TokenEntity;
@@ -8,6 +9,7 @@ import bg.softuni.fitcom.models.entities.UserEntity;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.repositories.AccountRepository;
+import bg.softuni.fitcom.repositories.CommentRepository;
 import bg.softuni.fitcom.repositories.ExerciseRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
 import bg.softuni.fitcom.repositories.TokenRepository;
@@ -17,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -40,9 +43,13 @@ public class TestDataUtils {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     public void cleanUpDatabase() {
         tokenRepository.deleteAll();
         accountRepository.deleteAll();
+        commentRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
         exerciseRepository.deleteAll();
@@ -50,7 +57,7 @@ public class TestDataUtils {
 
     public FitcomUser getUser() {
         return new FitcomUser(
-                "topsecret",
+                "test",
                 "georgi@abv.bg",
                 "Georgi",
                 "Georgiev",
@@ -60,7 +67,7 @@ public class TestDataUtils {
 
     public FitcomUser getAdmin() {
         return new FitcomUser(
-                "topsecret",
+                "test",
                 "admin@abv.bg",
                 "Admin",
                 "Admin",
@@ -69,6 +76,10 @@ public class TestDataUtils {
     }
 
     public void initRoles() {
+        if (roleRepository.count() > 0) {
+            return;
+        }
+
         RoleEntity user = new RoleEntity()
                 .setRole(RoleEnum.USER);
 
@@ -84,17 +95,19 @@ public class TestDataUtils {
         roleRepository.saveAll(List.of(user, trainer, nutritionist, admin));
     }
 
-    public void createUser() {
+    public UserEntity createUser() {
         UserEntity user = new UserEntity()
                 .setFirstName("Georgi")
                 .setLastName("Georgiev")
                 .setEmail("georgi@abv.bg")
                 .setPassword(passwordEncoder.encode("test"));
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public void createAdmin() {
+        initRoles();
+
         UserEntity user = new UserEntity()
                 .setFirstName("Admin")
                 .setLastName("Admin")
@@ -143,5 +156,15 @@ public class TestDataUtils {
         exerciseRepository.save(exercise);
     }
 
+    public CommentEntity createComment() {
+        UserEntity user = createUser();
 
+        CommentEntity comment = new CommentEntity()
+                    .setTextContent("Wow!")
+                    .setAuthor(user)
+                    .setApproved(false)
+                    .setCreated(LocalDateTime.now());
+
+            return commentRepository.save(comment);
+        }
 }
