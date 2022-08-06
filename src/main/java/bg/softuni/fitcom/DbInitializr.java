@@ -98,12 +98,13 @@ public class DbInitializr implements CommandLineRunner {
         BodyPartEntity shoulders = new BodyPartEntity()
                 .setName(BodyPartEnum.SHOULDERS);
 
-        this.bodyPartRepository.saveAll(List.of(abs, arms, back, chest, legs, shoulders));
+        BodyPartEntity other = new BodyPartEntity()
+                .setName(BodyPartEnum.OTHER);
+
+        this.bodyPartRepository.saveAll(List.of(abs, arms, back, chest, legs, shoulders, other));
     }
 
     private void seedExercises() {
-        BodyPartEntity chest = this.bodyPartRepository.findByName(BodyPartEnum.CHEST).get();
-
         ExerciseEntity benchPress = new ExerciseEntity()
                 .setName("Barbell Bench Press")
                 .setDescription("Grasp the bar just outside shoulder-width and arch your back so there’s space between your lower back and the bench.\n" +
@@ -127,8 +128,6 @@ public class DbInitializr implements CommandLineRunner {
                 .setVideoUrl("taI4XduLpTk");
 
         this.exerciseRepository.saveAll(List.of(benchPress, inclinePress, crossover));
-
-        BodyPartEntity abs = this.bodyPartRepository.findByName(BodyPartEnum.ABS).get();
 
         ExerciseEntity dumbbellCrunch = new ExerciseEntity()
                 .setName("Dumbbell crunch")

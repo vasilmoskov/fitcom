@@ -9,6 +9,7 @@ import bg.softuni.fitcom.models.service.TrainingProgramServiceModel;
 import bg.softuni.fitcom.models.view.TrainingProgramDetailsViewModel;
 import bg.softuni.fitcom.services.TrainingProgramService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -63,7 +65,7 @@ public class TrainingProgramController {
         pageNo = getValidatedPageNumber(pageNo, lastPage);
 
         model.addAttribute("trainingPrograms",
-                this.trainingProgramService.getTrainingPrograms(title, bodyPart,pageNo - 1, pageSize, sortBy));
+                this.trainingProgramService.getTrainingPrograms(title, bodyPart, pageNo - 1, pageSize, sortBy));
 
         model.addAttribute("title", title);
         model.addAttribute("bodyPart", bodyPart);
@@ -198,9 +200,10 @@ public class TrainingProgramController {
     }
 
     @ResponseBody
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}/remove-exercise")
     public void removeExerciseFromTraining(@PathVariable long id,
-                                             @RequestBody String exerciseName) {
+                                           @RequestBody String exerciseName) {
 
         exerciseName = exerciseName.replaceAll("\"", "");
         removeExerciseFromExercisesData(exerciseName);
@@ -269,7 +272,7 @@ public class TrainingProgramController {
             String description = exercisesData.get(++i);
             String videoUrl = exercisesData.get(++i);
 
-            if ("".equals(name.trim()) || "".equals(description.trim()) || "".equals(videoUrl.trim())) {
+            if ("" .equals(name.trim()) || "" .equals(description.trim()) || "" .equals(videoUrl.trim())) {
                 return null;
             }
 
@@ -304,6 +307,10 @@ public class TrainingProgramController {
     }
 
     private void removeExerciseFromExercisesData(String name) {
+        if (exercisesData == null) {
+            return;
+        }
+
         String exercise = exercisesData
                 .stream()
                 .filter(e -> e.contains(name))

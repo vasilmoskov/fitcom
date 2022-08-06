@@ -264,6 +264,11 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
                                                              List<BodyPartEntity> bodyParts,
                                                              UserEntity author,
                                                              GoalEntity goalEntity) {
+
+        if (bodyParts.isEmpty()) {
+            bodyParts = List.of(bodyPartRepository.findByName(BodyPartEnum.OTHER).get());
+        }
+
         return this.trainingProgramRepository
                 .findById(serviceModel.getId())
                 .orElseGet(TrainingProgramEntity::new)
@@ -319,7 +324,7 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
         return new TrainingProgramsOverviewViewModel()
                 .setId(entity.getId())
                 .setTitle(entity.getTitle())
-                .setDescription(entity.getDescription().length() > 50
+                .setDescription(entity.getDescription() != null && entity.getDescription().length() > 50
                         ? entity.getDescription().substring(0, 50) + "..."
                         : entity.getDescription())
                 .setPictureUrl(entity.getBodyParts().get(0).getPictureUrl())
