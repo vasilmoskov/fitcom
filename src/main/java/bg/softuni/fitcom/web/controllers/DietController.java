@@ -74,7 +74,7 @@ public class DietController {
                 .setAuthor(auth.getName());
 
         this.dietService.updateDiet(serviceModel);
-        return "redirect:";
+        return "redirect:/";
     }
 
     @GetMapping("/{id}")
@@ -125,7 +125,7 @@ public class DietController {
         return "diet-edit";
     }
 
-    @GetMapping("/{id}/edit-errors") // TODO: do I need that?
+    @GetMapping("/{id}/edit-errors")
     public String getEditWithErrors(@PathVariable long id, Model model) {
         return "diet-edit";
     }

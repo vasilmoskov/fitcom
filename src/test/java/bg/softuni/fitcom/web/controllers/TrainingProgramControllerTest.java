@@ -96,7 +96,6 @@ public class TrainingProgramControllerTest {
                 .andExpect(view().name("training-programs-add"));
     }
 
-
     @Test
     void testAddProgram() throws Exception {
         testDataUtils.createUser();

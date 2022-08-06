@@ -3,6 +3,7 @@ package bg.softuni.fitcom.utils;
 import bg.softuni.fitcom.models.entities.AccountEntity;
 import bg.softuni.fitcom.models.entities.BodyPartEntity;
 import bg.softuni.fitcom.models.entities.CommentEntity;
+import bg.softuni.fitcom.models.entities.DietEntity;
 import bg.softuni.fitcom.models.entities.ExerciseEntity;
 import bg.softuni.fitcom.models.entities.GoalEntity;
 import bg.softuni.fitcom.models.entities.RoleEntity;
@@ -16,6 +17,7 @@ import bg.softuni.fitcom.models.user.FitcomUser;
 import bg.softuni.fitcom.repositories.AccountRepository;
 import bg.softuni.fitcom.repositories.BodyPartRepository;
 import bg.softuni.fitcom.repositories.CommentRepository;
+import bg.softuni.fitcom.repositories.DietRepository;
 import bg.softuni.fitcom.repositories.ExerciseRepository;
 import bg.softuni.fitcom.repositories.GoalRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
@@ -59,6 +61,9 @@ public class TestControllerUtils {
     private TrainingProgramRepository trainingProgramRepository;
 
     @Autowired
+    private DietRepository dietRepository;
+
+    @Autowired
     private BodyPartRepository bodyPartRepository;
 
     @Autowired
@@ -68,6 +73,7 @@ public class TestControllerUtils {
         tokenRepository.deleteAll();
         accountRepository.deleteAll();
         commentRepository.deleteAll();
+        dietRepository.deleteAll();
         trainingProgramRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
@@ -93,6 +99,16 @@ public class TestControllerUtils {
                 "Georgi",
                 "Georgiev",
                 List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("TRAINER"))
+        );
+    }
+
+    public FitcomUser getNutritionist() {
+        return new FitcomUser(
+                "test",
+                "georgi@abv.bg",
+                "Georgi",
+                "Georgiev",
+                List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("NUTRITIONIST"))
         );
     }
 
@@ -312,5 +328,28 @@ public class TestControllerUtils {
                 .setGoal(loseFatGoal);
 
         return trainingProgramRepository.saveAll(List.of(trainingProgramChest, trainingProgramAbs ));
+    }
+
+    public List<DietEntity> createDiets() {
+        GoalEntity loseFatGoal = createLoseFatGoal();
+        GoalEntity gainMassGoal = createGainMassGoal();
+        UserEntity user = createUser();
+        UserEntity admin = createAdmin();
+
+        DietEntity mediterraneanDiet = new DietEntity()
+                .setTitle("Mediterranean diet")
+                .setDescription("The Mediterranean diet has long been considered the gold standard for nutrition, disease prevention, wellness, and longevity. This is based on its nutrition benefits and sustainability. The Mediterranean diet is based on foods that people in countries like Italy and Greece have traditionally eaten. Foods such as poultry, eggs, and dairy products are to be eaten in moderation, and red meats are limited.")
+                .setAuthor(user)
+                .setCreated(LocalDateTime.now())
+                .setGoal(loseFatGoal);
+
+        DietEntity bulkDiet = new DietEntity()
+                .setTitle("The Maximuscle 4 Week Bulking Diet")
+                .setDescription("You will gain many kilos.")
+                .setAuthor(admin)
+                .setCreated(LocalDateTime.now())
+                .setGoal(gainMassGoal);
+
+        return dietRepository.saveAll(List.of(mediterraneanDiet, bulkDiet));
     }
 }
