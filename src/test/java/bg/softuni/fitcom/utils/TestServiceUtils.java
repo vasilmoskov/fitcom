@@ -11,8 +11,12 @@ import bg.softuni.fitcom.models.enums.BodyPartEnum;
 import bg.softuni.fitcom.models.enums.GoalEnum;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.models.service.CommentAddServiceModel;
+import bg.softuni.fitcom.models.service.ProfileEditServiceModel;
 import bg.softuni.fitcom.models.service.TrainingProgramServiceModel;
+import bg.softuni.fitcom.models.service.UserRegisterServiceModel;
+import bg.softuni.fitcom.models.view.ProfileViewModel;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,7 +84,7 @@ public class TestServiceUtils {
     }
 
     public List<ExerciseEntity> createAbsExercises() {
-        List<ExerciseEntity> exerciseEntities = new  ArrayList<>();
+        List<ExerciseEntity> exerciseEntities = new ArrayList<>();
         ExerciseEntity dumbbellCrunch = new ExerciseEntity()
                 .setName("Dumbbell crunch")
                 .setDescription("Lie on your back, holding a dumbbell or weight plate across your chest in both hands. Raise your torso, then lower it, maintaining tension in your uppers abs throughout.")
@@ -119,12 +123,15 @@ public class TestServiceUtils {
     }
 
     public UserEntity createAnotherUser() {
+        List<RoleEntity> roles = new ArrayList<>();
+        roles.add(new RoleEntity().setRole(RoleEnum.NUTRITIONIST));
+
         UserEntity userEntity = new UserEntity()
                 .setFirstName("Pesho")
                 .setLastName("Petrov")
                 .setEmail("pesho@abv.bg")
                 .setPassword("test")
-                .setRoles(List.of(new RoleEntity().setRole(RoleEnum.NUTRITIONIST)));
+                .setRoles(roles);
 
         userEntity.setId(2);
 
@@ -205,5 +212,31 @@ public class TestServiceUtils {
                 .setCreated(LocalDateTime.now());
 
         return List.of(comment1, comment2);
+    }
+
+    public UserRegisterServiceModel createRegisterServiceModel() {
+        return new UserRegisterServiceModel()
+                .setFirstName("Misho")
+                .setLastName("Mishev")
+                .setAge(24)
+                .setEmail("misho@abv.bg")
+                .setPassword("test")
+                .setRoles(List.of(RoleEnum.TRAINER));
+    }
+
+    public ProfileViewModel createProfileViewModel() {
+        return new ProfileViewModel()
+                .setFirstName("Georgi")
+                .setLastName("Georgiev")
+                .setEmail("gosho@abv.bg")
+                .setRoles(List.of(RoleEnum.TRAINER));
+    }
+
+    public ProfileEditServiceModel createProfileEditServiceModel() {
+        return new ProfileEditServiceModel()
+                .setFirstName("Joro")
+                .setLastName("Joranski")
+                .setEmail("georgi@abv.bg")
+                .setAge(25);
     }
 }
