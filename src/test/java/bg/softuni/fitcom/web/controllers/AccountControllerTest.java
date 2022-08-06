@@ -1,7 +1,7 @@
 package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.util.OnCreateAccountEvent;
-import bg.softuni.fitcom.utils.TestDataUtils;
+import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class AccountControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TestDataUtils testDataUtils;
+    private TestControllerUtils testDataUtils;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;

@@ -2,7 +2,7 @@ package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.models.entities.TrainingProgramEntity;
 import bg.softuni.fitcom.models.enums.GoalEnum;
-import bg.softuni.fitcom.utils.TestDataUtils;
+import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class TrainingProgramControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TestDataUtils testDataUtils;
+    private TestControllerUtils testDataUtils;
 
     @AfterEach
     void tearDown() {

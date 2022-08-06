@@ -1,7 +1,7 @@
 package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.models.entities.UserEntity;
-import bg.softuni.fitcom.utils.TestDataUtils;
+import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TestDataUtils testDataUtils;
+    private TestControllerUtils testDataUtils;
 
     @BeforeEach
     void init() {

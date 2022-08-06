@@ -1,9 +1,7 @@
 package bg.softuni.fitcom.web.controllers;
 
-import bg.softuni.fitcom.models.entities.TokenEntity;
-import bg.softuni.fitcom.repositories.TokenRepository;
 import bg.softuni.fitcom.util.OnPasswordResetEvent;
-import bg.softuni.fitcom.utils.TestDataUtils;
+import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ public class PasswordControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TestDataUtils testDataUtils;
+    private TestControllerUtils testDataUtils;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
