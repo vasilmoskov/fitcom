@@ -5,8 +5,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -29,7 +31,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column //(nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column
@@ -51,17 +53,34 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<RoleEntity> pendingRoles = new ArrayList<>();
 
-    @ManyToMany //(cascade = CascadeType.REMOVE)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(cascade =
+            {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            },
+            targetEntity = TrainingProgramEntity.class)
     @JoinTable(name = "users_favourite_training_programs",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "training_program_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "training_program_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private List<TrainingProgramEntity> favouriteTrainingPrograms = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade =
+            {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            },
+            targetEntity = DietEntity.class)
     @JoinTable(name = "users_favourite_diets",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "diet_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "diet_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private List<DietEntity> favouriteDiets = new ArrayList<>();
 
     public String getFirstName() {

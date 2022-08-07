@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -139,8 +140,8 @@ public class TrainingProgramServiceImpl implements TrainingProgramService {
 
     @Override
     public TrainingProgramServiceModel updateProgram(TrainingProgramServiceModel serviceModel) {
-        List<ExerciseEntity> exercises = getExerciseEntities(serviceModel);
-        List<BodyPartEntity> bodyParts = getBodyPartEntities(serviceModel);
+        List<ExerciseEntity> exercises = new ArrayList<>(getExerciseEntities(serviceModel));
+        List<BodyPartEntity> bodyParts = new ArrayList<>(getBodyPartEntities(serviceModel));
         UserEntity author = getAuthor(serviceModel);
         GoalEntity goalEntity = getGoalEntity(serviceModel);
         TrainingProgramEntity trainingProgram = buildTrainingProgramEntity(serviceModel, exercises,

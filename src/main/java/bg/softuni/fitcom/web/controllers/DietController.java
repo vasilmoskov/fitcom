@@ -147,7 +147,7 @@ public class DietController {
         }
 
         this.dietService.updateDiet(serviceModel);
-        return "redirect:/diets";
+        return "redirect:/diets/" + id;
     }
 
     @PreAuthorize("@dietServiceImpl.canModify(#principal.name, #id)")

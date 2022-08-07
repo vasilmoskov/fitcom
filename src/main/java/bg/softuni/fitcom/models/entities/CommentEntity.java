@@ -1,9 +1,5 @@
 package bg.softuni.fitcom.models.entities;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -25,8 +21,7 @@ public class CommentEntity extends BaseEntity {
     @ManyToOne
     private UserEntity author;
 
-    @ManyToOne // (cascade = CascadeType.REMOVE)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     private TrainingProgramEntity trainingProgram;
 
     @ManyToOne

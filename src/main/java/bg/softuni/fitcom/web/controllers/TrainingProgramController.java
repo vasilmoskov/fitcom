@@ -189,7 +189,7 @@ public class TrainingProgramController {
         }
 
         this.trainingProgramService.updateProgram(serviceModel);
-        return "redirect:/training-programs";
+        return "redirect:/training-programs/" + id;
     }
 
     @PreAuthorize("@trainingProgramServiceImpl.canModify(#principal.name, #id)")

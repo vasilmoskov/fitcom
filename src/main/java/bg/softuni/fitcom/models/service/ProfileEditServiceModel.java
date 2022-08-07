@@ -12,7 +12,6 @@ public class ProfileEditServiceModel {
     private Integer age;
     private String pictureUrl;
     private String picturePublicId;
-//    private List<RoleEnum> roles;
 
     public long getId() {
         return id;
@@ -49,15 +48,6 @@ public class ProfileEditServiceModel {
         this.age = age;
         return this;
     }
-
-//    public List<RoleEnum> getRoles() {
-//        return roles;
-//    }
-//
-//    public ProfileEditServiceModel setRoles(List<RoleEnum> roles) {
-//        this.roles = roles;
-//        return this;
-//    }
 
     public String getEmail() {
         return email;

@@ -2,7 +2,9 @@ package bg.softuni.fitcom.models.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
@@ -43,9 +45,23 @@ public class TrainingProgramEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "exercise_id", referencedColumnName = "id"))
     private List<ExerciseEntity> exercises;
 
-    @OneToMany(mappedBy = "trainingProgram", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "trainingProgram", cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
+
+    @ManyToMany(cascade =
+            {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            },
+            targetEntity = UserEntity.class)
+    @JoinTable(name = "users_favourite_training_programs",
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "training_program_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    private List<UserEntity> usersFavouriteTrainings;
 
     public String getDescription() {
         return description;
@@ -121,6 +137,15 @@ public class TrainingProgramEntity extends BaseEntity {
 
     public TrainingProgramEntity setComments(List<CommentEntity> comments) {
         this.comments = comments;
+        return this;
+    }
+
+    public List<UserEntity> getUsersFavouriteTrainings() {
+        return usersFavouriteTrainings;
+    }
+
+    public TrainingProgramEntity setUsersFavouriteTrainings(List<UserEntity> usersFavouriteTrainings) {
+        this.usersFavouriteTrainings = usersFavouriteTrainings;
         return this;
     }
 }

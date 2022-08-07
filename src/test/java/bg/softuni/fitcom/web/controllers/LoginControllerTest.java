@@ -1,11 +1,13 @@
 package bg.softuni.fitcom.web.controllers;
 
+import bg.softuni.fitcom.DbInitializr;
 import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class LoginControllerTest {
+    @MockBean
+    private DbInitializr dbInitializr;
 
     @Autowired
     private MockMvc mockMvc;

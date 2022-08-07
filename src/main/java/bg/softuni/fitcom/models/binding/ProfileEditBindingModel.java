@@ -27,8 +27,6 @@ public class ProfileEditBindingModel {
 
     private String email;
 
-//    private List<RoleEnum> roles;
-
     public long getId() {
         return id;
     }
@@ -73,15 +71,6 @@ public class ProfileEditBindingModel {
         this.email = email;
         return this;
     }
-//
-//    public List<RoleEnum> getRoles() {
-//        return roles;
-//    }
-//
-//    public ProfileEditBindingModel setRoles(List<RoleEnum> roles) {
-//        this.roles = roles;
-//        return this;
-//    }
 
     public MultipartFile getAvatar() {
         return avatar;

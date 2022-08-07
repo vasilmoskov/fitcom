@@ -20,11 +20,6 @@
                 <ul>
                     <li th:each="r : *{roles}" th:text="${r.name().toLowerCase()}"></li>
                 </ul>
-                <!--            <p th:each="r : *{roles}" th:text="${r.name().toLowerCase()}"></p>-->
-
-                <!--            <div th:each="r : *{roles}">-->
-                <!--                <p th:text="${r.name().toLowerCase()}"></p>-->
-                <!--            </div>-->
 
                 <div class="admin buttons">
                     <form class="buttons-form" th:action="@{/pending/applications/{userId}(userId=*{userId})}"

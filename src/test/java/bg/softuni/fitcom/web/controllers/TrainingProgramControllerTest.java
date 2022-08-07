@@ -1,5 +1,6 @@
 package bg.softuni.fitcom.web.controllers;
 
+import bg.softuni.fitcom.DbInitializr;
 import bg.softuni.fitcom.models.entities.TrainingProgramEntity;
 import bg.softuni.fitcom.models.enums.GoalEnum;
 import bg.softuni.fitcom.utils.TestControllerUtils;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TrainingProgramControllerTest {
+
+    @MockBean
+    private DbInitializr dbInitializr;
 
     @Autowired
     private MockMvc mockMvc;
@@ -153,7 +158,6 @@ public class TrainingProgramControllerTest {
                 .andExpect(redirectedUrl("/forbidden"));
     }
 
-    // Not working
     @Test
     void testEditProgram() throws Exception {
         List<TrainingProgramEntity> trainingPrograms = testDataUtils.createTrainingPrograms();
@@ -166,7 +170,7 @@ public class TrainingProgramControllerTest {
                         .param("goal", String.valueOf(GoalEnum.GAIN_MASS))
                         .param("exercisesData", "Pull Ups", "Make them slow and clean", "eGo4IYlbE5g"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/training-programs"));
+                .andExpect(redirectedUrl("/training-programs/" + trainingPrograms.get(0).getId()));
     }
 
     @Test

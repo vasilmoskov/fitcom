@@ -1,5 +1,6 @@
 package bg.softuni.fitcom.web.controllers;
 
+import bg.softuni.fitcom.DbInitializr;
 import bg.softuni.fitcom.util.OnCreateAccountEvent;
 import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -31,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AccountControllerTest {
+    @MockBean
+    private DbInitializr dbInitializr;
 
     @Autowired
     private MockMvc mockMvc;

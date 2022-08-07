@@ -23,13 +23,6 @@ public interface TrainingProgramRepository extends JpaRepository<TrainingProgram
     @Query("select count(t) from TrainingProgramEntity t where t.title like %:title%")
     Integer findCountByContainingTitle(@Param("title") String title);
 
-//    not working :(
-//    @Query("select count(t) from TrainingProgramEntity t where :bodyPart in t.bodyParts")
-//    Integer findCountByContainingBodyPart(@Param("bodyPart") BodyPartEntity bodyPart);
-
-//    @Query("select count(t) from TrainingProgramEntity t where t.title like %:title% and :bodyPart in t.bodyParts")
-//    Integer findCountByContainingTitleAndBodyPart(@Param("title") String title, @Param("bodyPart") BodyPartEntity bodyPart);
-
     List<TrainingProgramEntity> findAllByBodyPartsIn(List<BodyPartEntity> bodyParts);
 
     List<TrainingProgramEntity> findAllByTitleContainingAndBodyPartsIn(String title, List<BodyPartEntity> bodyParts);

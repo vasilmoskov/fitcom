@@ -12,7 +12,6 @@ import bg.softuni.fitcom.models.enums.GoalEnum;
 import bg.softuni.fitcom.models.enums.RoleEnum;
 import bg.softuni.fitcom.repositories.BodyPartRepository;
 import bg.softuni.fitcom.repositories.DietRepository;
-import bg.softuni.fitcom.repositories.ExerciseRepository;
 import bg.softuni.fitcom.repositories.GoalRepository;
 import bg.softuni.fitcom.repositories.RoleRepository;
 import bg.softuni.fitcom.repositories.TrainingProgramRepository;
@@ -82,14 +81,15 @@ public class DbInitializr implements CommandLineRunner {
             return;
         }
 
-        UserEntity user = new UserEntity()
+        UserEntity admin = new UserEntity()
                 .setFirstName("Nedelcho")
                 .setLastName("Nedelev")
                 .setAge(25)
                 .setEmail("testdevstuff1@gmail.com")
+                .setPassword("45aa9a9e0aca2bf7c5bfeacd958e173a9f794992dceaa838740d937e2840a42817b9bb81c2d08703")
                 .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.ADMIN).get()));
 
-        this.userRepository.save(user);
+        this.userRepository.save(admin);
     }
 
     private void seedBodyParts() {
@@ -98,25 +98,32 @@ public class DbInitializr implements CommandLineRunner {
         }
 
         BodyPartEntity abs = new BodyPartEntity()
-                .setName(BodyPartEnum.ABS);
+                .setName(BodyPartEnum.ABS)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416844/abs_ixtbjy.jpg");
 
         BodyPartEntity arms = new BodyPartEntity()
-                .setName(BodyPartEnum.ARMS);
+                .setName(BodyPartEnum.ARMS)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416844/arms_j1vdaz.jpg");
 
         BodyPartEntity back = new BodyPartEntity()
-                .setName(BodyPartEnum.BACK);
+                .setName(BodyPartEnum.BACK)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416843/back_ahhqqh.jpg");
 
         BodyPartEntity chest = new BodyPartEntity()
-                .setName(BodyPartEnum.CHEST);
+                .setName(BodyPartEnum.CHEST)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416844/chest_zrragt.jpg");
 
         BodyPartEntity legs = new BodyPartEntity()
-                .setName(BodyPartEnum.LEGS);
+                .setName(BodyPartEnum.LEGS)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416843/legs_fdogom.jpg");
 
         BodyPartEntity shoulders = new BodyPartEntity()
-                .setName(BodyPartEnum.SHOULDERS);
+                .setName(BodyPartEnum.SHOULDERS)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1654416844/shoulders_eisyij.jpg");
 
         BodyPartEntity other = new BodyPartEntity()
-                .setName(BodyPartEnum.OTHER);
+                .setName(BodyPartEnum.OTHER)
+                .setPictureUrl("https://res.cloudinary.com/dilbpiicv/image/upload/v1659854998/other_qun1x1.webp");
 
         this.bodyPartRepository.saveAll(List.of(abs, arms, back, chest, legs, shoulders, other));
     }
@@ -164,6 +171,8 @@ public class DbInitializr implements CommandLineRunner {
 
         TrainingProgramEntity trainingProgramChest = new TrainingProgramEntity()
                 .setTitle("Chest Workout")
+                .setDescription("If you really want to pump up your pecs and build the best chest in the gym, you need targeted chest workouts that stimulate muscle growth in the best way possible. Because the main chest muscles (specifically the pectoralis major, aka pecs) are so huge, and contribute to so many movements, you’ll need more than just a handful of moves to build your upper chest (and entire upper body) from every angle.\n" +
+                        "\n")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(benchPress, inclinePress, crossover))
                 .setCreated(LocalDateTime.now())
@@ -182,10 +191,15 @@ public class DbInitializr implements CommandLineRunner {
 
         TrainingProgramEntity trainingProgramAbs = new TrainingProgramEntity()
                 .setTitle("Abs Workout")
+                .setDescription("If you’re looking to improve your abs, the good news is that there are a huge variety of abs workouts that can help you achieve that goal. \n" +
+                        "\n" +
+                        "Even if you’re not doing moves that focus on the abs directly, their location means that they are worked hard by compound exercises that hit both the upper and lower body. Your core is also key to any exercise in which you have to keep your body stable, such as static holds like the plank or tricky balancing acts like the single-leg Romanian deadlift.\n" +
+                        "\n" +
+                        "Whether your goal is a six-pack or just a little more definition around your midsection, compound lifts like squats, overhead presses and deadlifts will help get you there, and they’ll build strength all over your body at the same time. That said, there’s also room for more focused abs workouts too, especially if you have designs on achieving a cover model-style six-pack.")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(dumbbellCrunch, plank))
                 .setCreated(LocalDateTime.now())
-                .setBodyParts(List.of(this.bodyPartRepository.findByName(BodyPartEnum.CHEST).get()))
+                .setBodyParts(List.of(this.bodyPartRepository.findByName(BodyPartEnum.ABS).get()))
                 .setGoal(this.goalRepository.getById(2L));
 
         ExerciseEntity deadlift = new ExerciseEntity()
@@ -205,6 +219,8 @@ public class DbInitializr implements CommandLineRunner {
 
         TrainingProgramEntity trainingProgramBack = new TrainingProgramEntity()
                 .setTitle("Back Workout")
+                .setDescription("When you crack your exercise toolkit open each week on back day, you've got a seemingly endless array of movements available. If you're overwhelmed by the sheer number of row variations, or you draw a total blank when thinking of new exercises to try, consider this list your new back blueprint.\n" +
+                        "\n")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(deadlift, pullUp, tBarRow))
                 .setCreated(LocalDateTime.now())
@@ -223,6 +239,8 @@ public class DbInitializr implements CommandLineRunner {
 
         TrainingProgramEntity trainingProgramShoulders = new TrainingProgramEntity()
                 .setTitle("Shoulders Workout")
+                .setDescription("Lifting a weight that’s too heavy for you is a mistake regardless of the part of the body you’re working, but it can be truly disastrous when performing a shoulder workout. The shoulders are delicate and complicated joints that are not especially easy to target, and if you do put them under too much pressure before they’re ready you can end up with injuries that put you out of action for months.\n" +
+                        "\n")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(overheadPress, barbellShrug))
                 .setCreated(LocalDateTime.now())
@@ -237,7 +255,9 @@ public class DbInitializr implements CommandLineRunner {
                 .setVideoUrl("bEv6CCg2BC8");
 
         TrainingProgramEntity trainingProgramLegs = new TrainingProgramEntity()
-                .setTitle("Shoulders Workout")
+                .setTitle("Legs Workout")
+                .setDescription("It’s all too common for people to skip a leg day. Because… well… leg workouts are hard, and then there’s the all too familiar “waddle” that comes in the days to follow. But here’s the thing… when you hit your legs hard enough to make them grow, the rest of you usually gets bigger, leaner, and more muscular, too!\n" +
+                        "\n")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(backSquat))
                 .setCreated(LocalDateTime.now())
@@ -260,7 +280,9 @@ public class DbInitializr implements CommandLineRunner {
                 .setVideoUrl("YUhAXDSL7Ko");
 
         TrainingProgramEntity trainingProgramArms = new TrainingProgramEntity()
-                .setTitle("Shoulders Workout")
+                .setTitle("Arms Workout")
+                .setDescription("Tired of your T-shirt sleeves blowing in the wind? Well, clicking on this article is your first rep towards building bigger biceps, triceps and forearms. Each of these arm exercises hits maximum muscle fibres to spark the growth you're after and proves any piece of kit – in the right hands and in the right arm workout – has gun-toting potential to build bigger, thicker arms.\n" +
+                        "\n")
                 .setAuthor(this.userRepository.getById(1L))
                 .setExercises(List.of(bicepsCurl, concentrationCurl, underhandSeatedRow))
                 .setCreated(LocalDateTime.now())
