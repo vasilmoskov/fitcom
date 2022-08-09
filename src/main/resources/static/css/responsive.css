@@ -1,0 +1,14 @@
+@media all and (max-width: 755px) {
+    header .logo {
+        min-width: 30px;
+    }
+
+    header {
+        flex-direction: column;
+    }
+
+    .navbar-list {
+        flex-direction: column;
+    }
+
+}

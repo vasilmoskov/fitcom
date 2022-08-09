@@ -32,7 +32,7 @@ header {
 
 .logo {
     margin-left: 10px;
-    width: 20%;
+    width: 40px;
     border-bottom-color: white;
     border-radius: 200px;
 }
@@ -74,6 +74,10 @@ header {
 
 main {
     min-height: 73%;
+}
+
+.training-form, .fit-form, .profile-form, .register-form {
+    min-width: 300px;
 }
 
 /* footer */
