@@ -1,6 +1,7 @@
 package bg.softuni.fitcom.web.controllers;
 
 import bg.softuni.fitcom.DbInitializr;
+import bg.softuni.fitcom.models.entities.ExerciseEntity;
 import bg.softuni.fitcom.utils.TestControllerUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,9 @@ public class ExerciseControllerTest {
 
     @Test
     void testGetExerciseById_returnsOk() throws Exception {
-        testDataUtils.createExercise();
+        ExerciseEntity exercise = testDataUtils.createExercise();
 
-        mockMvc.perform(get("/exercises/1").with(user(testDataUtils.getUser())))
+        mockMvc.perform(get("/exercises/" + exercise.getId()).with(user(testDataUtils.getUser())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("exercise-details"));
     }

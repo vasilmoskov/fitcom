@@ -192,7 +192,7 @@ public class TestControllerUtils {
         tokenRepository.save(tokenEntity);
     }
 
-    public void createExercise() {
+    public ExerciseEntity createExercise() {
         ExerciseEntity exercise = new ExerciseEntity()
                 .setName("Barbell Bench Press")
                 .setDescription("Grasp the bar just outside shoulder-width and arch your back so there’s space between your lower back and the bench.\n" +
@@ -202,7 +202,7 @@ public class TestControllerUtils {
 
         exercise.setId(1);
 
-        exerciseRepository.save(exercise);
+        return exerciseRepository.save(exercise);
     }
 
     public List<ExerciseEntity> createChestExercises() {

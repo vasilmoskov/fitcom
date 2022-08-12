@@ -107,11 +107,12 @@ public class TrainingProgramController {
                              RedirectAttributes redirectAttributes, Authentication auth) {
 
         TrainingProgramServiceModel serviceModel = toServiceModel(bindingModel, auth);
-        exercisesData = new ArrayList<>();
 
         if (serviceModel == null) {
             redirectAttributes.addFlashAttribute("noExercises", true);
         } else {
+            exercisesData = new ArrayList<>();
+
             serviceModel.getExercises().forEach(e -> {
                 exercisesData.add("name|" + e.getName());
                 exercisesData.add("description|" + e.getDescription());
@@ -262,17 +263,21 @@ public class TrainingProgramController {
                 .setAuthor(auth.getName());
     }
 
-    private List<ExerciseAddServiceModel> getExercises(List<String> exercisesData) {
-        if (exercisesData == null) return null;
+    private List<ExerciseAddServiceModel> getExercises(List<String> modelExercisesData) {
+        if (modelExercisesData == null) {
+            exercisesData = new ArrayList<>();
+            return null;
+        }
 
         List<ExerciseAddServiceModel> exercises = new ArrayList<>();
 
-        for (int i = 0; i < exercisesData.size(); i++) {
-            String name = exercisesData.get(i);
-            String description = exercisesData.get(++i);
-            String videoUrl = exercisesData.get(++i);
+        for (int i = 0; i < modelExercisesData.size(); i++) {
+            String name = modelExercisesData.get(i);
+            String description = modelExercisesData.get(++i);
+            String videoUrl = modelExercisesData.get(++i);
 
-            if ("" .equals(name.trim()) || "" .equals(description.trim()) || "" .equals(videoUrl.trim())) {
+            if ("".equals(name.trim()) || "".equals(description.trim()) || "".equals(videoUrl.trim())) {
+                fillExercisesDataWithInvalidExercises(modelExercisesData);
                 return null;
             }
 
@@ -285,6 +290,20 @@ public class TrainingProgramController {
         }
 
         return exercises;
+    }
+
+    private void fillExercisesDataWithInvalidExercises(List<String> modelExercisesData) {
+        exercisesData = new ArrayList<>();
+
+        if (modelExercisesData == null) {
+            return;
+        }
+
+        for (int i = 0; i < modelExercisesData.size(); i++) {
+            exercisesData.add("name|" + modelExercisesData.get(i));
+            exercisesData.add("description|" + modelExercisesData.get(++i));
+            exercisesData.add("video|" + modelExercisesData.get(++i));
+        }
     }
 
     private Integer getValidatedPageNumber(Integer pageNo, int lastPage) {
