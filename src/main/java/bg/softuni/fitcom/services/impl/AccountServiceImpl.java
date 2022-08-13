@@ -86,7 +86,14 @@ public class AccountServiceImpl implements AccountService {
 
         roleEntities.add(this.roleRepository.findByRole(RoleEnum.USER).get());
 
-        return this.modelMapper.map(serviceModel, AccountEntity.class)
+        return new AccountEntity()
+                .setLastName(serviceModel.getFirstName())
+                .setFirstName(serviceModel.getLastName())
+                .setAge(serviceModel.getAge())
+                .setEmail(serviceModel.getEmail())
+                .setPassword(serviceModel.getPassword())
+                .setPictureUrl(serviceModel.getPictureUrl())
+                .setPicturePublicId(serviceModel.getPicturePublicId())
                 .setRoles(roleEntities);
     }
 }
